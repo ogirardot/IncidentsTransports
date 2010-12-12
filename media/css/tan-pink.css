@@ -1,0 +1,13 @@
+a { color: #a89481; }
+div#page .header .price_tag{ 
+	background: url('../images/themes/tan-pink/price_tag.png') no-repeat top;
+}
+div#page .section_title {
+	background: url('../images/themes/tan-pink/section_title.gif') no-repeat top;
+}
+a.button {
+	background: url('../images/themes/tan-pink/button_right.png') no-repeat top right;
+}
+	a.button span{
+		background: url('../images/themes/tan-pink/button_left.png') no-repeat top left;
+	}

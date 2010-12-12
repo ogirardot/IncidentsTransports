@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>  
+	<title>IncidentsRATP</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="description" content="Information trafic et incidents RATP, Metro, RER, Tramway par les usagers en temps réel "/>
+    <meta name="keywords"
+          content="ratp, metro, rer, tramway, transports, paris, france, trafic, incidents"/>
+    <meta name="robots" content="index,follow"/>
+	<link rel="stylesheet" type="text/css" href="/site_media/css/styles.css" />
+	<link rel="stylesheet" type="text/css" href="/site_media/css/blue-green.css" media="screen" />
+</head>
+<body>
+	
+	<div id="header">
+		<div id="menu_nav" class="page">
+	        <a href="/home" class="logo">IncidentsRATP</a>
+	        <ul>
+	            <li><a href="{% url frontend.views.index %}">Accueil</a></li>
+	            <li><a href="{% url frontend.views.get_incidents 'hour' %}">Incidents</a></li>
+	            <li><a href="{% url frontend.views.contribute %}">Contribuer</a></li>
+	            <li><a href="{% url frontend.views.about %}">A propos</a></li>
+	        </ul>
+			<div class="clear"></div>
+	    </div>
+	</div>
+	{% block content %} {% endblock %}
+	<div id="footer" class="page">
+		<p>Copyright 2010 Incidents-RATP.com.</p>
+		<ul>
+            <li><a href="{% url frontend.views.index %}">Accueil</a></li>
+            <li><a href="{% url frontend.views.get_incidents 'hour' %}">Incidents</a></li>
+            <li><a href="{% url frontend.views.contribute %}">Contribuer</a></li>
+            <li><a href="{% url frontend.views.about %}">A propos</a></li>
+        </ul>
+		<div class="clear"></div>
+	</div>
+	
+</body>
+</html>

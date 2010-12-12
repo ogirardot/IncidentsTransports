@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="page">
+			
+	<div class="top"></div>
+	<div class="content">
+		
+		<div class="header page">
+			<h1>Contribuer et partager</h1>
+		</div>
+		
+		<div id="contact" class="padding">
+			<p>Ajouter une incident, c'est simple, facile, et ça aide tout le monde !</p>
+			<p class="validation"></p>
+			<h1>Ajouter un incident</h1>
+			<form id="add_form" action="{% url frontend.views.add_incident %}" method="POST">{% csrf_token %}
+				{{form.as_p}}
+				<div class="send_form">
+					<a href="javascript:document.forms['add_form'].submit();" class="button" id="send"><span>Ajouter</span></a>
+				</div>
+				<div class="clear"></div>
+			</form>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+{% endblock %}

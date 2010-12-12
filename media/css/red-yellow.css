@@ -1,0 +1,13 @@
+a { color: #A71319; }
+div#page .header .price_tag{ 
+	background: url('../images/themes/red-yellow/price_tag.png') no-repeat top;
+}
+div#page .section_title {
+	background: url('../images/themes/red-yellow/section_title.gif') no-repeat top;
+}
+a.button {
+	background: url('../images/themes/red-yellow/button_right.png') no-repeat top right;
+}
+	a.button span{
+		background: url('../images/themes/red-yellow/button_left.png') no-repeat top left;
+	}

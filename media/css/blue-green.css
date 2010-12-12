@@ -1,0 +1,13 @@
+a { color: #2468AC; }
+div#page .header .price_tag{ 
+	background: url('/site_media/images/themes/blue-green/price_tag.png') no-repeat top;
+}
+div#page .section_title {
+	background: url('/site_media/images/themes/blue-green/section_title.gif') no-repeat top;
+}
+a.button {
+	background: url('/site_media/images/themes/blue-green/button_right.png') no-repeat top right;
+}
+	a.button span{
+		background: url('/site_media/images/themes/blue-green/button_left.png') no-repeat top left;
+	}
