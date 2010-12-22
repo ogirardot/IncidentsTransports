@@ -1,4 +1,24 @@
 {% extends 'base.html' %}
+{% block extra_js %}
+<script type="text/javascript" src="/site_media/js/mootools-core-1.3-full-nocompat-yc.js"></script>
+<script type="text/javascript" charset="utf-8">
+function incident_interact(id, scope) {
+	new Request.HTML({url: "/incident/action/" + id + "/" + scope, 
+		onSuccess: function(html) {
+			//Clear the text currently inside the results div.
+			$(scope + '_' + id).set('text', '');
+			//Inject the new DOM elements into the results div.
+			$(scope + '_' + id).adopt(html);
+		},
+		//Our request will most likely succeed, but just in case, we'll add an
+		//onFailure method which will let the user know what happened.
+		onFailure: function() {
+			$(scope + '_' + id).set('text', 'The request failed.');
+		}
+	}).send();
+}
+</script>
+{% endblock %}
 {% block content %}
 <div id="page">
 			
@@ -34,9 +54,14 @@
 							{% for incident in incidents %}
 							<tr>
 								<td>{{ incident.line }}</td>
-								<td>{{ incident.time|date:"D d M Y à h:m:s"}}</td>
+								<td>{{ incident.time|date:"D d M Y à H:i:s"}}</td>
 								<td>{{ incident.reason}}</td>
-								<td class="last"><a title="j'y suis/j'y étais" href="{% url frontend.views.incident_interact incident.id 'plus' %}" class="button"><span>+1</span></a>({{ incident.plus }})<a title="Incident non-existant" href="{% url frontend.views.incident_interact incident.id 'minus' %}" class="button"><span>-1</span></a>({{ incident.minus }})<a title="Incident terminé" href="{% url frontend.views.incident_interact incident.id 'end' %}"><img src="/site_media/images/icons/check.png" style="padding-top:10px; width:32px; heigh:32px"/></a></td>
+								<td class="last">
+									<a title="j'y suis/j'y étais" href="javascript:incident_interact({{ incident.id }}, 'plus')" class="button"><span>+1</span></a>
+									(<span id="plus_{{ incident.id }}">{{ incident.plus }}</span>)
+									<a title="Incident non-existant" href="javascript:incident_interact({{ incident.id }}, 'minus')" class="button"><span>-1</span></a>
+									(<span id="minus_{{ incident.id }}">{{ incident.minus }}</span>)
+									<a title="Incident terminé" href="javascript:incident_interact({{ incident.id }}, 'end')"><img src="/site_media/images/icons/check.png" style="padding-top:10px; width:32px; heigh:32px"/></a></td>
 							</tr>
 							{% endfor %}
 						</table>

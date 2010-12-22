@@ -20,7 +20,7 @@ class Incident(models.Model):
 	ended = models.IntegerField(default=0)
 	reason = models.TextField("Raison", help_text="Raison évoquée quant à l'incident", blank=True, null=True)
 	contributors = models.TextField()
-	validated = models.BooleanField(default=False)
+	validated = models.BooleanField(default=True)
 	
 	def __unicode__(self):
 		return "Incident<%s, %s>" % (str(self.line), self.time)

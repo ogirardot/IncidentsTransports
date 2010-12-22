@@ -44,14 +44,24 @@ def add_incident(request):
 
 def incident_interact(request, id, action):
 	incident = Incident.objects.get(id=id)
+	out = ""
 	if action == "plus":
 		incident.plus += 1
+		if incident.plus - incident.minus > 3 and not incident.validated:
+			incident.validated = True
+		out = incident.plus
 	elif action =="minus":
 		incident.minus += 1
+		if incident.minus - incident.plus > 3:
+			incident.validated = False
+		out = incident.minus
 	elif action == "end":
 		incident.ended += 1
+		if incident.ended > 3:
+			incident.validated = False
+		out = incident.ended
 	incident.save()
-	return HttpResponse("ok")
+	return HttpResponse(str(out))
 	
 def get_incidents(request, scope):
 	return_objs = []
@@ -64,5 +74,5 @@ def get_incidents(request, scope):
 		filter_time = datetime.now() + timedelta(days=-1)
 	else:
 		return render('index.html')
-	return_objs = Incident.objects.filter(time__gte=filter_time).filter(validated=True)
+	return_objs = Incident.objects.filter(time__gte=filter_time).filter(validated=True).order_by('time').reverse()
 	return render('get_incidents.html', {'incidents' : return_objs, 'scope':scope})
