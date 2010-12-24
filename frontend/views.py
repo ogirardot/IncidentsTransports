@@ -31,9 +31,6 @@ def contribute_twitter(request):
 def contact(request):
 	return render('contact.html')
 
-def incident_interact(request, action):
-	return render('contact.html')
-
 def add_incident(request):
 	if request.method == "POST":
 		form = AddIncidentForm(request.POST)
@@ -60,7 +57,11 @@ def incident_interact(request, id, action):
 		if incident.ended > 3:
 			incident.validated = False
 		out = incident.ended
-	incident.save()
+	if request.session.get('has_commented', False):
+		return HttpResponse(str(out-1))
+	else:
+		incident.save()
+		request.session['has_commented'] = True
 	return HttpResponse(str(out))
 	
 def get_incidents(request, scope):
