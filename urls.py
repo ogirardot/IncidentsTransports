@@ -5,6 +5,9 @@ import settings
 from django.contrib import admin
 admin.autodiscover()
 
+# handler404 :
+handler404 = 'IncidentRATP.frontend.views.handler_404'
+
 urlpatterns = patterns('IncidentRATP.frontend.views',
     (r'^api/', include('IncidentRATP.api.urls')),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -17,7 +20,6 @@ urlpatterns = patterns('IncidentRATP.frontend.views',
     (r'^contribuer/donation/?$', 'contribute_donate'),
     (r'^contribuer/twitter/?$', 'contribute_twitter'),
     (r'^contribuer/?$', 'contribute'),
-    (r'^contact/?$', 'contact'),
     (r'^about/?$', 'about'),
     (r'^home/?$', 'index'),
     (r'^dev/?$', 'dev'),

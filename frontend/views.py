@@ -1,3 +1,4 @@
+import random
 from django.http import HttpResponse, HttpResponseRedirect as redirect
 from django.shortcuts import render_to_response as render
 from django.core.urlresolvers import reverse
@@ -6,6 +7,12 @@ from models import Station, Line, Incident, AddIncidentForm
 
 def index(request):
 	return render('index.html')
+	
+def handler_404(request):
+	images = ["1293872626292.jpg", "1293878551093.jpg" ]
+	legendes = ["Mais pourquoi sont-ils aussi mechant ?!", "rien a dire d'autre..."]
+	pick_a_number = random.randint(0, len(images))-1
+	return render('404.html' , { 'image' : images[pick_a_number], 'legende' : legendes[pick_a_number]})
 	
 def dev(request):
 	return render('dev.html')
@@ -27,9 +34,6 @@ def contribute_donate(request):
 
 def contribute_twitter(request):
 	return render('twitter.html')
-
-def contact(request):
-	return render('contact.html')
 
 def add_incident(request):
 	if request.method == "POST":
@@ -54,14 +58,22 @@ def incident_interact(request, id, action):
 		out = incident.minus
 	elif action == "end":
 		incident.ended += 1
-		if incident.ended > 3:
-			incident.validated = False
 		out = incident.ended
-	if request.session.get('has_commented', False):
-		return HttpResponse(str(out-1))
+	comments = request.session.get('commented', None)
+	print "base %s " %comments
+	if comments:
+		print comments
+		print comments.split(",")
+		if str(incident.id) in comments.split(","):
+			print "already commented"
+			return HttpResponse(str(out-1))
+		else:
+			print "saving"
+			incident.save()
+			request.session['commented'] += "," + str(incident.id)
 	else:
 		incident.save()
-		request.session['has_commented'] = True
+		request.session['commented'] = str(incident.id)
 	return HttpResponse(str(out))
 	
 def get_incidents(request, scope):

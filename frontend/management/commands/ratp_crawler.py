@@ -4,6 +4,7 @@ import urllib2
 import re
 from IncidentRATP.frontend.models import Incident, Line
 from django.core.management.base import BaseCommand, CommandError
+from stripogram import html2text
 
 URL = "http://www.ratp.fr/informer/trafic/trafic.php?cat=%s"
 RER = "2"
@@ -23,7 +24,7 @@ class Command(BaseCommand):
 		consolidated_text = ""
 		for line in urllib2.urlopen(URL % METRO):
 			consolidated_text += line
-		
+		print html2text(consolidated_text)[72:75]
 		for result in compiled_pattern.findall(consolidated_text):
 			(str_ligne, raison) = result
 			incident = Incident()

@@ -53,7 +53,7 @@ function incident_interact(id, scope) {
 							</thead>
 							{% for incident in incidents %}
 							<tr>
-								<td>{{ incident.line }}</td>
+								<td>{{ incident.line }} {% if incident.ended > 3 %} (Terminé) {% endif %}</td>
 								<td>{{ incident.time|date:"D d M Y à H:i:s"}}</td>
 								<td>{{ incident.reason}}</td>
 								<td class="last">
@@ -91,7 +91,7 @@ function incident_interact(id, scope) {
 				</div>
 				<div class="sidebar_box">
 					<h4>Contacter Nous</h4>
-					<p>Vous avez encore des questions? <a href="{% url frontend.views.contact %}">Contactez nous</a>.</p>
+					<p>Vous avez encore des questions? <a href="mailto:contact@incidents-ratp.com">Contactez nous</a>.</p>
 				</div>
 			</div>
 			<div class="clear"></div>
