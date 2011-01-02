@@ -4,4 +4,7 @@
   * rajouter la limitation à 1 appel par minute 
   * améliorer le formulaire de contrib
   * rajouter les lignes de bus
-  * ajouter une vue de detail de l'incident ou limiter temporairement à 150 char
+  * limiter l'affichage à 150 char
+  * plan comm
+    * lancer le twitter
+    * 

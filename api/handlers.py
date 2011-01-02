@@ -1,3 +1,4 @@
+from piston.utils import throttle
 from piston.handler import BaseHandler
 from frontend.models import Incident
 from datetime import datetime, timedelta
@@ -6,7 +7,8 @@ class IncidentHandler(BaseHandler):
    allowed_methods = ('GET',)
    model = Incident   
    fields = (('line', ('name',),), 'time', 'reason')
-
+              
+   @throttle(5, 10*60)
    def read(self, request, scope, incident_id=None):
         """
         Returns a single post if `incident_id` is given,

@@ -175,14 +175,14 @@ div#page {
 		background: url('/site_media/images/page_middle.gif') repeat-y top;
 	}
 		div#page .content .padding {
-			padding: 25px 45px 25px 45px;
+			padding: 25px 25px 25px 45px;
 		}
 		div#page .left {
-			width: 600px;
+			width: 640px;
 			float: left;
 		}
 		div#page .right {
-			width: 245px;
+			width: 235px;
 			float: right;
 		}
 	div#page .bottom {

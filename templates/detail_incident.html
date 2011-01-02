@@ -21,10 +21,8 @@ function incident_interact(id, scope) {
 {% endblock %}
 {% block content %}
 <div id="page">
-			
 	<div class="top"></div>
 	<div class="content">
-		
 		<div class="header page">
 			<h1>Incidents</h1>
 			<ul>
@@ -34,48 +32,30 @@ function incident_interact(id, scope) {
 				<li><a href="{% url frontend.views.add_incident %}">Ajouter</a></li>
 			</ul>
 		</div>
-		
 		<div class="padding">
-			
 			<div class="left">
-				<h4>Liste des derniers incidents</h4>
+				<h4>Détail de l'incident {{ incident.id  }}</h4>
 				<br/>
 				<p>
-					<div id="price_table">
-						<table cellpadding="0" cellspacing="0">
-							<thead>
-								<tr>
-									<td style="width: 70px;"><h2>Ligne</h2><span>ligne impactée</span></td>
-									<td style="width: 150px;"><h2>Date et heure</h2><span>où l'incident a été enregistré</span></td>
-									<td><h2>Raison</h2><span>transmise aux usagers</span></td>
-									<td><h2>Actions</h2><span>vous pouvez réagir</span></td>
-								</tr>
-							</thead>
-							{% for incident in incidents %}
-							<tr>
-								<td style="width: 70px;"><a href={% url frontend.views.get_incident incident.id %}>{{ incident.line }} {% if incident.ended > 3 %} (Terminé) {% endif %}</a></td>
-								<td style="width: 70px;">{{ incident.time|date:"D d M Y à H:i:s" }}</td>
-								<td>{{ incident.reason }}</td>
-								<td class="last">
-									<a title="j'y suis/j'y étais comme l'ont signalé {{incident.plus}} personnes" href="javascript:incident_interact({{ incident.id }}, 'plus')" class="button"><span>+1</span></a>
-									(<span id="plus_{{ incident.id }}">{{ incident.plus }}</span>)
-									<a title="Incident non-existant comme l'ont signalé {{incident.minus}} personnes" href="javascript:incident_interact({{ incident.id }}, 'minus')" class="button"><span>-1</span></a>
-									(<span id="minus_{{ incident.id }}">{{ incident.minus }}</span>)
-									<a title="Incident terminé comme l'ont signalé {{ incident.ended }} personnes" href="javascript:incident_interact({{ incident.id }}, 'end')"><img src="/site_media/images/icons/check.png" style="padding-top:10px; width:32px; heigh:32px"/></a>(<span id="end_{{ incident.id }}">{{ incident.ended }}</span>)</td>
-							</tr>
-							{% endfor %}
-						</table>
+					<div>
+						<p> <b>Ligne impactée</b> : {{ incident.line }}</p>
+						<p> <b>Date</b> : {{ incident.time|date:"D d M Y à H:i:s" }}</p>
+						<p> <b>Raison de l'incident</b> : {{ incident.reason}}</p>
+						<p> <b>Status de l'incident</b> :  {% if incident.ended > 3 %} Terminé {% else %} En cours... {% endif %}</p>  
+						<p> <b>Action disponibles</b> : <a title="j'y suis/j'y étais comme l'ont signalé {{incident.plus}} personnes" href="javascript:incident_interact({{ incident.id }}, 'plus')" class="button"><span>+1</span></a>
+						(<span id="plus_{{ incident.id }}">{{ incident.plus }}</span>)
+						<a title="Incident non-existant comme l'ont signalé {{incident.minus}} personnes" href="javascript:incident_interact({{ incident.id }}, 'minus')" class="button"><span>-1</span></a>
+						(<span id="minus_{{ incident.id }}">{{ incident.minus }}</span>)
+						<a title="Incident terminé comme l'ont signalé {{ incident.ended }} personnes" href="javascript:incident_interact({{ incident.id }}, 'end')"><img src="/site_media/images/icons/check.png" style="padding-top:10px; width:32px; heigh:32px"/></a>(<span id="end_{{ incident.id }}">{{ incident.ended }}</span>)</p>
 					</div>
 				</p>
 			</div>
-
 			<div class="right">
 				<div class="sidebar_box">
 					<h4>Accès rapide</h4>
 					<p><b><br/>+1 = je confirme cet incident;<br/> -1 = cet incident n'existe pas;<br/><img src="/site_media/images/icons/check.png" style="padding-top:2px; width:15px; heigh:15px"/> = cet incident est terminé;</b></p>
 					<p>Pour avoir accès aux incidents et pouvoir contribuer :</p>
 				</div>
-				
 				<div class="sidebar_box">
 					<h4>Voir les incidents :</h4>
 					<ul>
@@ -95,10 +75,8 @@ function incident_interact(id, scope) {
 				</div>
 			</div>
 			<div class="clear"></div>
-			
 		</div>
-		
 	</div>
 	<div class="bottom"></div>
 </div>
-{% endblock %}
+{% endblock %}	

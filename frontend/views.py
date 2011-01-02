@@ -1,6 +1,6 @@
 import random
 from django.http import HttpResponse, HttpResponseRedirect as redirect
-from django.shortcuts import render_to_response as render
+from django.shortcuts import get_object_or_404, render_to_response as render
 from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta
 from models import Station, Line, Incident, AddIncidentForm
@@ -38,10 +38,14 @@ def contribute_twitter(request):
 def add_incident(request):
 	if request.method == "POST":
 		form = AddIncidentForm(request.POST)
-		form.save()
-		return render('thanks.html', {'number' : Incident.objects.count()})
-	form = AddIncidentForm()
-	return render('add_incident.html', {'form' : form})
+		if form.is_valid():
+			form.save()
+			return render('thanks.html', {'number' : Incident.objects.count()})
+		else:
+			return render('add_incident.html', {'form' : form})
+	else:
+		form = AddIncidentForm()
+		return render('add_incident.html', {'form' : form})
 
 def incident_interact(request, id, action):
 	incident = Incident.objects.get(id=id)
@@ -60,15 +64,10 @@ def incident_interact(request, id, action):
 		incident.ended += 1
 		out = incident.ended
 	comments = request.session.get('commented', None)
-	print "base %s " %comments
 	if comments:
-		print comments
-		print comments.split(",")
 		if str(incident.id) in comments.split(","):
-			print "already commented"
 			return HttpResponse(str(out-1))
 		else:
-			print "saving"
 			incident.save()
 			request.session['commented'] += "," + str(incident.id)
 	else:
@@ -89,3 +88,7 @@ def get_incidents(request, scope):
 		return render('index.html')
 	return_objs = Incident.objects.filter(time__gte=filter_time).filter(validated=True).order_by('time').reverse()
 	return render('get_incidents.html', {'incidents' : return_objs, 'scope':scope})
+
+def get_incident(request, id):
+	incident = get_object_or_404(Incident, pk=id)                      
+	return render('detail_incident.html', {'incident' :  incident}) 
