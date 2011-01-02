@@ -1,0 +1,7 @@
+  * graphisme de get_incidents
+  * compte flattr
+  * lien vers google modérator dans contribuer et A propos
+  * rajouter la limitation à 1 appel par minute 
+  * améliorer le formulaire de contrib
+  * rajouter les lignes de bus
+  * ajouter une vue de detail de l'incident ou limiter temporairement à 150 char
