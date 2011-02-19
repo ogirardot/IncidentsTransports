@@ -1,4 +1,17 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
+{% block extra_css %}
+<style type="text/css"> 
+#add_form ul {
+	display: block; 
+	float: left;
+	margin-bottom:10px; 
+	margin-right:10px; 
+}
+#add_form ul li {
+	color: red;
+}
+</style>
+{% endblock %}
 {% block content %}
 <div id="page">
 			
