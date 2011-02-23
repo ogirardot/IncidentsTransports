@@ -43,7 +43,8 @@
 	        <a href="/home" class="logo">IncidentsRATP</a>
 	        <ul>
 	            <li><a href="{% url frontend.views.index %}">Accueil</a></li>
-	            <li><a href="{% url frontend.views.get_incidents 'hour' %}">Incidents</a></li>
+	            <li><a href="{% url frontend.views.get_incidents 'hour' %}">Incidents</a></li>         
+	            <li><a href="{% url frontend.views.add_incident %}">Ajouter un Incident</a></li>  
 	            <li><a href="{% url frontend.views.contribute %}">Contribuer</a></li>
 	            <li><a href="{% url frontend.views.about %}">A propos</a></li>
 	        </ul>
