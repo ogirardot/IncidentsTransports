@@ -29,7 +29,7 @@ class Command(BaseCommand):
 				print line['id_str'], 
 				(str_ligne, raison) = extract_re.findall(line['text'])[0]
 				incident = Incident()
-				ligne = Line.objects.get_or_create(name=str_ligne.strip())[0]
+				ligne = Line.objects.get_or_create(name=str_ligne.strip().upper())[0]
 				incident.line = ligne
 				incident.reason = raison.strip()
 				incident.contributors = '(%s, %s)' % (line['id_str'], line['from_user'])
