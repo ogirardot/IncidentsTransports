@@ -48,7 +48,7 @@ def add_incident(request):
 		return render('add_incident.html', {'form' : form})
 
 def incident_interact(request, id, action):
-	incident = Incident.objects.get(id=id)
+	incident = Incident.objects.get(id=id)    
 	out = ""
 	if action == "plus":
 		incident.plus += 1
@@ -64,8 +64,8 @@ def incident_interact(request, id, action):
 		incident.ended += 1
 		out = incident.ended
 	comments = request.session.get('commented', None)
-	if comments:
-		if str(incident.id) in comments.split(","):
+	if comments or incident.ended > 15:
+		if incident.ended > 15 or str(incident.id) in comments.split(","):
 			return HttpResponse(str(out-1))
 		else:
 			incident.save()
