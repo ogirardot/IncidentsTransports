@@ -65,8 +65,11 @@ def incident_interact(request, id, action):
 		out = incident.ended
 	comments = request.session.get('commented', None)
 	if comments or incident.ended > 15:
-		if incident.ended > 15 or str(incident.id) in comments.split(","):
-			return HttpResponse(str(out-1))
+		if incident.ended > 15 or str(incident.id) in comments.split(","): 
+			if action =="minus":
+				return HttpResponse(str(out-2))   
+			else:
+				return HttpResponse(str(out-1))
 		else:
 			incident.save()
 			request.session['commented'] += "," + str(incident.id)
