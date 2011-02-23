@@ -60,7 +60,7 @@ function incident_interact(id, scope) {
 									<a title="j'y suis/j'y étais comme l'ont signalé {{incident.plus}} personnes" href="javascript:incident_interact({{ incident.id }}, 'plus')" class="button"><span>+1</span></a>
 									(<span id="plus_{{ incident.id }}">{{ incident.plus }}</span>)
 									<a title="Incident non-existant comme l'ont signalé {{incident.minus}} personnes" href="javascript:incident_interact({{ incident.id }}, 'minus')" class="button"><span>-1</span></a>
-									(<span id="minus_{{ incident.id }}">{{ incident.minus }}</span>)
+									(<span id="minus_{{ incident.id }}">{{ incident.minus }}</span>)<br/>
 									<a title="Incident terminé comme l'ont signalé {{ incident.ended }} personnes" href="javascript:incident_interact({{ incident.id }}, 'end')"><img src="/site_media/images/icons/check.png" style="padding-top:10px; width:32px; heigh:32px"/></a>(<span id="end_{{ incident.id }}">{{ incident.ended }}</span>)</td>
 							</tr>
 							{% endfor %}
