@@ -50,8 +50,13 @@ def add_incident(request):
 	if request.method == "POST":
 		form = AddIncidentForm(request.POST)
 		if form.is_valid():
-			form.save()
-			return render('thanks.html', {'number' : Incident.objects.count()})
+			contributed = request.session.get('contributed', None)
+			if contributed
+				return render('thanks.html', {'number' : Incident.objects.count()})
+			else:
+				form.save()
+				request.session['contributed'] = str(datetime.now())
+				return render('thanks.html', {'number' : Incident.objects.count()})
 		else:
 			return render('add_incident.html', {'form' : form})
 	else:
