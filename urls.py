@@ -23,6 +23,7 @@ urlpatterns = patterns('IncidentRATP.frontend.views',
     (r'^contribuer/?$', 'contribute'),
     (r'^about/?$', 'about'),
     (r'^home/?$', 'index'),
+	(r'^stats/?$', 'stats'),
     (r'^dev/?$', 'dev'),
     (r'^/?$', 'index'),
 )

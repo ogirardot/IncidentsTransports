@@ -19,6 +19,17 @@ def dev(request):
 
 def incidents(request):
 	return render('incidents.html')
+                              
+def stats(request):
+	def extract_date(entity):
+		return entity.time.date()
+		  
+	entities = Incident.objects.order_by('time')
+	                              
+	from itertools import groupby
+	data = [len(list(g)) for t, g in groupby(entities, key=extract_date)]                      
+	labels = []
+	return render('stats.html', {'data': data,'labels': labels})    
 
 def contribute(request):
 	return render('contribute.html')

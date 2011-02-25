@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}<h1>Statistiques</h1>{% endblock %}   
+{% block extra_js %} 
+<script type="text/javascript" src="/site_media/js/raphael-min.js"></script>
+<script type="text/javascript" src="/site_media/js/g.raphael-min.js"></script> 
+<script type="text/javascript" src="/site_media/js/g.bar-min.js"></script>
+<script type="text/javascript" src="/site_media/js/g.dot-min.js"></script>
+<script type="text/javascript" src="/site_media/js/g.line-min.js"></script>
+<script type="text/javascript" src="/site_media/js/g.pie-min.js"></script> 
+<script type="text/javascript"> 
+
+function drawChart() {
+   var r = Raphael("holder", 600, 300);
+   
+   var chart = r.g.barchart(10, 10, 580, 280, [[{% for point in data %} {% if forloop.last %} {{ point }} {% else %} {{ point }}, {% endif %}{% endfor %}]], {stacked: true, type: "soft"});
+   
+   /*
+    * Create an hover effect to display the value when the mouse is over the graph.
+    */
+   chart.hover(function() {
+       // Create a popup element on top of the bar
+       this.flag = r.g.popup(this.bar.x, this.bar.y, (this.bar.value || "0") + " incidents").insertBefore(this);
+   }, function() {
+       // hide the popup element with an animation and remove the popup element at the end
+       this.flag.animate({opacity: 0}, 300, function () {this.remove();});
+   });
+   
+   r.g.txtattr = {font:"12px Fontin-Sans, Arial, sans-serif", fill:"#000", "font-weight": "bold"};
+
+   //chart.label( [{% for label in labels %}{% if forloop.last %}"{{ label }}"{% else %}"{{ label }}", {% endif %}{% endfor %}]);
+   
+   // iterate over all the bar
+   for (var i = 0; i < chart.bars[0].length; i++) {
+       var bar = chart.bars[0][i];
+       // if the value of the bar is greater or equals to 15 we change the color to red
+       if (bar.value >= 15) {
+           bar.attr("fill", "#bf2f2f");
+           bar.attr("stroke", "#bf2f2f");
+       }
+   }
+}               
+
+window.onload = function() {
+	drawChart()
+}
+</script>
+{% endblock %}
+{% block content %}
+<div id="page">
+			
+	<div class="top"></div>
+	<div class="content">
+		
+		<div class="header page">
+			<h1>Statistiques des incidents</h1>
+		</div>
+		
+		<div id="html_elements" class="padding">
+			
+			<p>Utilisons ces données, pour voir l'évolution du service et comment il est utilisé :</p>
+			<h3>Nombre d'incidents déclarés par date</h3>
+			<div id="holder"></div>
+		</div>
+		
+	</div>
+	<div class="bottom"></div>
+</div>
+{% endblock %}
