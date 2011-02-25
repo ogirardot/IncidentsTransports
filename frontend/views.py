@@ -1,4 +1,4 @@
-import random
+import random, re
 from django.http import HttpResponse, HttpResponseRedirect as redirect
 from django.shortcuts import get_object_or_404, render_to_response as render
 from django.core.urlresolvers import reverse
@@ -49,7 +49,7 @@ def contribute_twitter(request):
 def add_incident(request):
 	if request.method == "POST":
 		form = AddIncidentForm(request.POST)
-		if form.is_valid() and ((" chier " or " connard " or " bite " or " chatte " or " cul ") not in form['reason'].data) :
+		if form.is_valid() and not re.search("chier|connard|bite|chatte|cul", form['reason'].data) :
 			form.save()
 			return render('thanks.html', {'number' : Incident.objects.count()})
 		else:
