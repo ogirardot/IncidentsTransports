@@ -49,7 +49,7 @@ def contribute_twitter(request):
 def add_incident(request):
 	if request.method == "POST":
 		form = AddIncidentForm(request.POST)
-		if form.is_valid():
+		if form.is_valid() and ("bite" not in form['reason'].data) :
 			form.save()
 			return render('thanks.html', {'number' : Incident.objects.count()})
 		else:
