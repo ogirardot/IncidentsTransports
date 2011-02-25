@@ -36,7 +36,7 @@ class IncidentCRUDHandler(BaseHandler):
 	allowed_methods = ('GET','POST',)
 	model = Incident   
 	fields = (('line', ('name',),), 'time', 'reason')  
-	@throttle(3, 60)
+	@throttle(3, 2*60)
 	def create(self, request):
 		if request.content_type:
 			data = request.data 
