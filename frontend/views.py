@@ -67,7 +67,7 @@ def incident_interact(request, id, action):
 			incident.validated = True
 		out = incident.plus
 	elif action =="minus":
-		incident.minus += 2
+		incident.minus += 3
 		if incident.minus - incident.plus > 1:
 			incident.validated = False
 		out = incident.minus
