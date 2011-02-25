@@ -75,8 +75,8 @@ def incident_interact(request, id, action):
 		incident.ended += 1
 		out = incident.ended
 	comments = request.session.get('commented', None)
-	if comments or incident.ended > 15:
-		if incident.ended > 15 or str(incident.id) in comments.split(","): 
+	if comments or incident.ended > 8:
+		if incident.ended > 8 or str(incident.id) in comments.split(","): 
 			if action =="minus":
 				return HttpResponse(str(out-2))   
 			else:
