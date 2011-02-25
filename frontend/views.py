@@ -45,7 +45,7 @@ def contribute_donate(request):
 
 def contribute_twitter(request):
 	return render('twitter.html')
-
+	                                
 def add_incident(request):
 	if request.method == "POST":
 		form = AddIncidentForm(request.POST)

@@ -26,7 +26,7 @@ class Incident(models.Model):
 		return "Incident<%s, %s>" % (str(self.line), self.time)
 		
 class AddIncidentForm(forms.ModelForm):
-	contributors = forms.EmailField(label="Email", help_text="Indiquez votre adresse email pour valider la sauvegarde")
+	contributors = forms.EmailField(label="Email", help_text="Indiquez votre adresse email pour valider la sauvegarde") 
 	class Meta:
 		model = Incident
 		fields = ('line', 'reason', 'contributors')
