@@ -49,7 +49,7 @@ def contribute_twitter(request):
 def add_incident(request):
 	if request.method == "POST":
 		form = AddIncidentForm(request.POST)
-		if form.is_valid() and (("chier" or "connard" or "bite" or "chatte" or "cul") not in form['reason'].data) and (("sitedemerde@degage.fr" or "connard.fr") not in form['contributors'].data) :
+		if form.is_valid() and ((" chier " or " connard " or " bite " or " chatte " or " cul ") not in form['reason'].data) :
 			form.save()
 			return render('thanks.html', {'number' : Incident.objects.count()})
 		else:
