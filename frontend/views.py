@@ -78,7 +78,7 @@ def incident_interact(request, id, action):
 	if comments or incident.ended > 8:
 		if incident.ended > 8 or str(incident.id) in comments.split(","): 
 			if action =="minus":
-				return HttpResponse(str(out-2))   
+				return HttpResponse(str(out-3))   
 			else:
 				return HttpResponse(str(out-1))
 		else:
