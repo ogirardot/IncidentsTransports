@@ -8,7 +8,6 @@ import re
 BAD_WORDS = " chier| connard| bite| chatte| cul "
 class IncidentHandler(BaseHandler):
    	allowed_methods = ('GET',)
-   	model = Incident   
    	fields = (('line', ('name',),), 'time', 'reason')
               
    	@throttle(5, 10*60)
@@ -31,6 +30,14 @@ class IncidentHandler(BaseHandler):
 				filter_time = datetime.now() + timedelta(days=-1)
 			return_objs = Incident.objects.filter(time__gte=filter_time).filter(validated=True)
 			return return_objs # Or base.filter(...)        
+
+class LigneHandler(BaseHandler):
+	allowed_methods = ('GET', )
+	model = Line 
+	fields = ('uid', 'name')
+	@classmethod 
+	def uid(klass, model): 
+		return model.pk
                   
 class IncidentCRUDHandler(BaseHandler):                 
 	allowed_methods = ('GET','POST',)
