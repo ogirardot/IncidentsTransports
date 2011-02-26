@@ -73,8 +73,11 @@ class IncidentCRUDHandler(BaseHandler):
 		print "called with request %s " % (request.content_type)
 		if request.content_type:
 			try:
-				data = request.data 
-				line = Line.objects.get(pk=int(data['line']))
+				data = request.data  
+				if 'line_id' in data:
+					line = Line.objects.get(pk=int(data['line_id']))
+				else:
+					line = Line.objects.get_or_create(name=str(data['line_name']).strip())[0]
 				if not line:
 					return rc.BAD_REQUEST                   
 				# check for bad words :    
