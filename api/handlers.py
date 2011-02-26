@@ -69,17 +69,23 @@ class IncidentCRUDHandler(BaseHandler):
 	allowed_methods = ('POST',)
 	model = Incident
 	@throttle(5, 5*60)
-	def create(self, request):
+	def create(self, request):   
+		print "called with request %s " % (request.content_type)
 		if request.content_type:
-			data = request.data 
-			line = Line.objects.get(pk=int(data['line']))
-			if not line:
-				return rc.BAD_REQUEST                   
-			# check for bad words :
-			print "we'll deal with it"
-			#comment = contributors
-			#incident = Incident(line=line, contributors=)   
-			return rc.CREATED
+			try:
+				data = request.data 
+				line = Line.objects.get(pk=int(data['line']))
+				if not line:
+					return rc.BAD_REQUEST                   
+				# check for bad words :    
+				print "we'll deal with it"
+				comment = data['reason']
+				source = data['source']
+				incident = Incident(line=line, contributors=source, reason=comment)
+				incident.save()   
+				return rc.CREATED  
+			except:
+				return rc.BAD_REQUEST
 		else: 
 			form = AddIncidentForm(request.POST) 
 			if form.is_valid():
