@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from piston.utils import throttle, rc
 from piston.handler import BaseHandler
 from frontend.models import Incident, Line, AddIncidentForm     
@@ -5,11 +7,22 @@ from django.shortcuts import render_to_response as render
 from datetime import datetime, timedelta 
 import re  
 
-BAD_WORDS = " chier| connard| bite| chatte| cul "
+BAD_WORDS = " chier| connard| bite| chatte| cul " 
+class IncidentWrapper(object):
+	def __init__(uid, line_name, time, plus, minus, ended, reason):
+		self.uid = uid
+		self.time = time
+		self.line = line_name
+		self.plus = plus
+		self.minus = minus
+		self.ended = ended
+		self.reason = reason 
+		self.status = "Terminé" if self.ended > 3 else "En cours..."
+		
 class IncidentHandler(BaseHandler):
-   	allowed_methods = ('GET',)
-   	fields = (('line', ('name',),), 'time', 'reason')
-              
+	allowed_methods = ('GET',)
+	fields = (('line', ('name',),), 'time', 'plus','minus', 'ended', 'id', 'reason')
+		
    	@throttle(5, 10*60)
 	def read(self, request, scope, incident_id=None):
 		"""
