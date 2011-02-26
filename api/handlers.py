@@ -21,7 +21,7 @@ class IncidentWrapper(object):
 		
 class IncidentHandler(BaseHandler):
 	allowed_methods = ('GET',)
-	fields = (('line', ('name',),), 'time', 'plus','minus', 'ended', 'id', 'reason')
+	#fields = ('line', ('name',),), 'time', 'plus','minus', 'ended', 'id', 'reason')
 		
    	@throttle(5, 10*60)
 	def read(self, request, scope, incident_id=None):
@@ -42,7 +42,15 @@ class IncidentHandler(BaseHandler):
 			elif scope == "day":
 				filter_time = datetime.now() + timedelta(days=-1)
 			return_objs = Incident.objects.filter(time__gte=filter_time).filter(validated=True)
-			return return_objs # Or base.filter(...)        
+			return [{
+			'uid' : incident.id,
+			'line' : incident.line.name,
+			'last_modified_time' : incident.time,
+			'vote_plus' : incident.plus,
+			'vote_minus' : incident.minus,
+			'vote_ended' : incident.ended,
+			'status' : "Terminé" if incident.ended > 3 else "En cours...",
+			'reason' : incident.reason } for incident in return_objs] # Or base.filter(...)        
 
 class LigneHandler(BaseHandler):
 	allowed_methods = ('GET', )
@@ -53,9 +61,8 @@ class LigneHandler(BaseHandler):
 		return model.pk
                   
 class IncidentCRUDHandler(BaseHandler):                 
-	allowed_methods = ('GET','POST',)
-	model = Incident   
-	fields = (('line', ('name',),), 'time', 'reason')  
+	allowed_methods = ('POST',)
+	model = Incident
 	@throttle(3, 5*60)
 	def create(self, request):
 		if request.content_type:
@@ -75,5 +82,6 @@ class IncidentCRUDHandler(BaseHandler):
 				return render('thanks.html', {'number': Incident.objects.count()}); 
 			else:     
 				resp = rc.BAD_REQUEST
+				resp.write("Incorrect parameters, submitted form is invalid.")
 				return resp
 			
