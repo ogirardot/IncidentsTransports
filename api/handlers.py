@@ -40,8 +40,13 @@ class IncidentHandler(BaseHandler):
 			elif scope == "hour":
 				filter_time = datetime.now() + timedelta(hours=-1)
 			elif scope == "day":
-				filter_time = datetime.now() + timedelta(days=-1)
-			return_objs = Incident.objects.filter(time__gte=filter_time).filter(validated=True)
+				filter_time = datetime.now() + timedelta(days=-1) 
+			elif scope == "all":
+				filter_time = None
+			if filter_time:
+				return_objs = Incident.objects.filter(time__gte=filter_time).filter(validated=True).order_by('time').reverse()
+			else:
+				return_objs = Incident.objects.filter(validated=True).order_by('time').reverse()[:15]
 			return [{
 			'uid' : incident.id,
 			'line' : incident.line.name,
@@ -63,7 +68,7 @@ class LigneHandler(BaseHandler):
 class IncidentCRUDHandler(BaseHandler):                 
 	allowed_methods = ('POST',)
 	model = Incident
-	@throttle(3, 5*60)
+	@throttle(5, 5*60)
 	def create(self, request):
 		if request.content_type:
 			data = request.data 
