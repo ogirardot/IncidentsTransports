@@ -23,7 +23,7 @@ class IncidentHandler(BaseHandler):
 	allowed_methods = ('GET',)
 	#fields = ('line', ('name',),), 'time', 'plus','minus', 'ended', 'id', 'reason')
 		
-   	@throttle(5, 10*60)
+   	@throttle(30, 60)
 	def read(self, request, scope, incident_id=None):
 		"""
         Returns a single post if `incident_id` is given,
