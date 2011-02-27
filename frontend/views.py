@@ -16,6 +16,9 @@ def handler_404(request):
 	
 def dev(request):
 	return render('dev.html')
+	       
+def dev_iphone(request):
+	return render('dev_iphone.html')
 
 def incidents(request):
 	return render('incidents.html')
