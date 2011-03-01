@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>  
-	<title>IncidentsRATP</title>
+	<title>[Paris] IncidentsTransports</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="description" content="Information trafic et incidents RATP, Metro, RER, Tramway par les usagers en temps réel "/>
+    <meta name="description" content="Information trafic et incidents RATP, SNCF, TER, TGV, Metro, RER, Tramway par les usagers en temps réel "/>
     <meta name="keywords"
           content="ratp, metro, rer, tramway, transports, paris, france, trafic, incidents"/>
     <meta name="robots" content="index,follow"/>
@@ -29,7 +29,7 @@
 	
 	<div id="header">
 		<div id="menu_nav" class="page">
-	        <a href="/home" class="logo">IncidentsRATP</a>
+	        <a href="/home" class="logo">IncidentsTransports</a>
 	        <ul>
 	            <li><a href="{% url frontend.views.index %}">Accueil</a></li>
 	            <li><a href="{% url frontend.views.get_incidents 'hour' %}">Incidents</a></li> 
@@ -42,7 +42,7 @@
 	</div>
 	{% block content %} {% endblock %}
 	<div id="footer" class="page">
-		<p>Copyright 2010-2011 Incidents-RATP.com.</p>       
+		<p>Copyright 2010-2011 Incidents-Transports.com.</p>       
 		<ul>
             <li><a href="{% url frontend.views.index %}">Accueil</a></li>
             <li><a href="{% url frontend.views.get_incidents 'hour' %}">Incidents</a></li>
