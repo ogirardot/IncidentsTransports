@@ -52,6 +52,7 @@ class IncidentHandler(BaseHandler):
 			return [{
 			'uid' : incident.id,
 			'line' : incident.line.name,
+			'line_id' : incident.line.id,
 			'last_modified_time' : incident.time,
 			'vote_plus' : incident.plus,
 			'vote_minus' : incident.minus,
