@@ -8,6 +8,7 @@ ligne_handler = Resource(LigneHandler)
 
 urlpatterns = patterns('',
    	url(r'^incidents.(?P<emitter_format>[a-z]+)/(?P<scope>[a-z]+)$', incident_handler),
+	url(r'^incident.(?P<emitter_format>[a-z]+)/(?P<incident_id>[\d]+)', incident_handler),
 	url(r'^incident/?$', crud_incident_handler), 
 	url(r'^ligne/?$', ligne_handler),
 )
