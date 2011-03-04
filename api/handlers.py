@@ -43,6 +43,8 @@ class IncidentHandler(BaseHandler):
 				filter_time = datetime.now() + timedelta(days=-1) 
 			elif scope == "all":
 				filter_time = None
+			else:
+				return []
 			if filter_time:
 				return_objs = Incident.objects.filter(time__gte=filter_time).filter(validated=True).order_by('time').reverse()
 			else:
@@ -50,6 +52,7 @@ class IncidentHandler(BaseHandler):
 			return [{
 			'uid' : incident.id,
 			'line' : incident.line.name,
+			'line_id' : incident.line.id,
 			'last_modified_time' : incident.time,
 			'vote_plus' : incident.plus,
 			'vote_minus' : incident.minus,
