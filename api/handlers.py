@@ -24,7 +24,7 @@ class IncidentHandler(BaseHandler):
 	#fields = ('line', ('name',),), 'time', 'plus','minus', 'ended', 'id', 'reason')
 		
    	@throttle(30, 60)
-	def read(self, request, scope, incident_id=None):
+	def read(self, request, scope=None, incident_id=None):
 		"""
         Returns a single post if `incident_id` is given,
         otherwise a subset.
@@ -33,7 +33,17 @@ class IncidentHandler(BaseHandler):
 		base = Incident.objects
 		
 		if incident_id:
-			return base.get(pk=blogpost_id)
+			incident = base.get(pk=incident_id)
+			return {
+                        'uid' : incident.id,
+                        'line' : incident.line.name,
+                        'line_id' : incident.line.id,
+                        'last_modified_time' : incident.time,
+                        'vote_plus' : incident.plus,
+                        'vote_minus' : incident.minus,
+                        'vote_ended' : incident.ended,
+                        'status' : "Terminé" if incident.ended > 3 else "En cours...",
+                        'reason' : incident.reason }
 		else:
 			if scope == "minute":
 				filter_time = datetime.now() + timedelta(minutes=-1)
