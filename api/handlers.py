@@ -43,6 +43,8 @@ class IncidentHandler(BaseHandler):
 				filter_time = datetime.now() + timedelta(days=-1) 
 			elif scope == "all":
 				filter_time = None
+			else:
+				return []
 			if filter_time:
 				return_objs = Incident.objects.filter(time__gte=filter_time).filter(validated=True).order_by('time').reverse()
 			else:
