@@ -111,3 +111,58 @@ class IncidentCRUDHandler(BaseHandler):
 				resp.write("Incorrect parameters, submitted form is invalid.")
 				return resp
 			
+class IncidentVoteHandler(BaseHandler):
+	allowed_methods = ('GET', 'POST')
+	def read(self, request, incident_id, action): 
+		if incident_id:   
+			try:                       
+				incident = Incident.objects.get(pk=incident_id)
+				if action == "plus":
+					return {"number": incident.plus}
+				elif action == "minus":
+					return {"number": incident.minus}
+				elif action == "end":
+					return {"number": incident.ended} 
+				else: return rc.BAD_REQUEST
+			except:
+				return rc.BAD_REQUEST
+		else: return rc.BAD_REQUEST    	
+
+	def create(self, request, incident_id, action):  
+		if incident_id:   
+			try:                       
+				incident = Incident.objects.get(pk=incident_id)
+				if action == "plus":
+					incident.plus += 1
+					if incident.plus - incident.minus > 3 and not incident.validated:
+						incident.validated = True
+				elif action =="minus":
+					incident.minus += 3
+					if incident.minus - incident.plus > 1:
+						incident.validated = False
+				elif action == "end":
+					incident.ended += 1
+				comments = request.session.get('commented', None)
+				if comments or incident.ended > 8:
+					if incident.ended > 8 or str(incident.id) in comments.split(","): 
+						return rc.ALL_OK
+					else:
+						incident.save()
+						request.session['commented'] += "," + str(incident.id)
+				else:
+					incident.save()
+					request.session['commented'] = str(incident.id)
+				return rc.CREATED
+			except Exception,e:
+				print e
+				return rc.BAD_REQUEST
+		else: return rc.BAD_REQUEST
+	            
+			
+			
+			
+			
+			
+			
+			
+			
