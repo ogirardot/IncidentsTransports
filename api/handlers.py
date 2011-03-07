@@ -6,7 +6,7 @@ from frontend.models import Incident, Line, AddIncidentForm
 from django.shortcuts import render_to_response as render
 from datetime import datetime, timedelta 
 import re  
-
+encoding = "ISO-8859-1"
 BAD_WORDS = " chier| connard| bite| chatte| cul " 
 class IncidentWrapper(object):
 	def __init__(uid, line_name, time, plus, minus, ended, reason):
@@ -72,16 +72,15 @@ class IncidentCRUDHandler(BaseHandler):
 	def create(self, request):   
 		print "called with request %s " % (request.content_type)
 		if request.content_type:
-			try:
-				data = request.data  
+			try:                                    
+				data = request.data                 
 				if 'line_id' in data:
 					line = Line.objects.get(pk=int(data['line_id']))
 				else:
-					line = Line.objects.get_or_create(name=str(data['line_name']).strip())[0]
+					line = Line.objects.get_or_create(name=data['line_name'].strip())[0]
 				if not line:
 					return rc.BAD_REQUEST                   
 				# check for bad words :    
-				print "we'll deal with it"
 				comment = data['reason']
 				source = data['source']
 				incident = Incident(line=line, contributors=source, reason=comment)
