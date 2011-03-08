@@ -49,16 +49,21 @@ class IncidentHandler(BaseHandler):
 				filter_time = datetime.now() + timedelta(minutes=-1)
 			elif scope == "hour":
 				filter_time = datetime.now() + timedelta(hours=-1)
-			elif scope == "day":
-				filter_time = datetime.now() + timedelta(days=-1) 
+			elif scope == "day":    
+				filter_time = datetime.now().date() 
 			elif scope == "all":
-				filter_time = None
+				filter_time = None  
+			elif scope == "current":
+				filter_time = datetime.now() + timedelta(days=-1)  
 			else:
-				return []
+				return []  
 			if filter_time:
 				return_objs = Incident.objects.filter(time__gte=filter_time).filter(validated=True).order_by('time').reverse()
 			else:
-				return_objs = Incident.objects.filter(validated=True).order_by('time').reverse()[:15]
+				return_objs = Incident.objects.filter(validated=True).order_by('time').reverse()[:15] 
+			# filter out terminated events
+			if scope =="current":
+				return_objs = [ incident for incident in return_objs if not incident.ended > 3]
 			return [{
 			'uid' : incident.id,
 			'line' : incident.line.name,
