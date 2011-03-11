@@ -19,7 +19,8 @@ def dev(request):
 	       
 def dev_iphone(request):
 	return render('dev_iphone.html')
-
+def load_test(request):
+	return HttpResponse("42")
 def incidents(request):
 	return render('incidents.html')
                               
