@@ -26,6 +26,7 @@ urlpatterns = patterns('IncidentRATP.frontend.views',
     (r'^home/?$', 'index'),
 	(r'^stats/?$', 'stats'),
     (r'^dev/?$', 'dev'),
+    (r'mu-86515d2e-482e5eb8-4a1262bb-ab3242ca/?$', 'load_test'),
     (r'^/?$', 'index'),
 )
 
