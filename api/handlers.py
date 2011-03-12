@@ -103,7 +103,7 @@ class IncidentCRUDHandler(BaseHandler):
 				source = data['source']
 				incident = Incident(line=line, contributors=source, reason=comment)
 				incident.save()   
-				return rc.CREATED  
+				return str(incident.id)  
 			except:
 				return rc.BAD_REQUEST
 		else: 
