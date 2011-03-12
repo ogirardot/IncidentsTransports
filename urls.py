@@ -1,9 +1,15 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import *  
+from django.contrib.sitemaps import Sitemap
 import settings
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
-admin.autodiscover()
+admin.autodiscover()       
+
+# google sitemaps :
+sitemaps = {
+	
+}
 
 # handler404 :
 handler404 = 'IncidentRATP.frontend.views.handler_404'
@@ -22,11 +28,15 @@ urlpatterns = patterns('IncidentRATP.frontend.views',
     (r'^contribuer/twitter/?$', 'contribute_twitter'),
     (r'^contribuer/?$', 'contribute'),
     (r'^dev/iphone/?$', 'dev_iphone'),
+	(r'^dev/android/?$', 'dev_android'),
     (r'^about/?$', 'about'),   
     (r'^home/?$', 'index'),
 	(r'^stats/?$', 'stats'),
     (r'^dev/?$', 'dev'),
     (r'^/?$', 'index'),
+)                                                       
+urlpatterns += patterns('',
+	(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
 )
 
 #local urls for serving media files during development

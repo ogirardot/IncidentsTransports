@@ -19,7 +19,10 @@ def dev(request):
 	       
 def dev_iphone(request):
 	return render('dev_iphone.html')
-
+                                       
+def dev_android(request):
+	return render('dev_android.html')
+	
 def incidents(request):
 	return render('incidents.html')
                               
