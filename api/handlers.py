@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from piston.utils import throttle, rc
+from django.http import HttpResponse
 from piston.handler import BaseHandler
 from frontend.models import Incident, Line, AddIncidentForm     
 from django.shortcuts import render_to_response as render
@@ -102,8 +103,8 @@ class IncidentCRUDHandler(BaseHandler):
 				comment = data['reason']
 				source = data['source']
 				incident = Incident(line=line, contributors=source, reason=comment)
-				incident.save()   
-				return incident.id  
+				incident.save() 
+				return HttpResponse(str(incident.id), status=201)
 			except:
 				return rc.BAD_REQUEST
 		else: 
