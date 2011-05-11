@@ -32,7 +32,8 @@
 		<div id="menu_nav" class="page">
 	        <a href="/home" class="logo">IncidentsTransports</a>
 	        <ul>
-	            <li><a href="{% url frontend.views.index %}">Accueil</a></li>
+	            <li><a href="{% url frontend.views.index %}">Accueil</a></li>  
+	            <li><a href="{% url blog_index %}">Blog</a></li>
 	            <li><a href="{% url frontend.views.get_incidents 'hour' %}">Incidents</a></li> 
 	            <li><a href="{% url frontend.views.add_incident %}">Ajouter un Incident</a></li> 
 	            <li><a href="{% url frontend.views.contribute %}">Contribuer</a></li>
@@ -45,7 +46,8 @@
 	<div id="footer" class="page">
 		<p>Copyright 2010-2011 Incidents-Transports.com.</p>       
 		<ul>
-            <li><a href="{% url frontend.views.index %}">Accueil</a></li>
+            <li><a href="{% url frontend.views.index %}">Accueil</a></li> 
+            <li><a href="{% url blog_index %}">Blog</a></li>
             <li><a href="{% url frontend.views.get_incidents 'hour' %}">Incidents</a></li>
             <li><a href="{% url frontend.views.dev %}">Dev</a></li>
             <li><a href="{% url frontend.views.contribute %}">Contribuer</a></li>

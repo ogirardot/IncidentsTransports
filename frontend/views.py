@@ -15,7 +15,8 @@ def handler_404(request):
 	return render('404.html' , { 'image' : images[pick_a_number], 'legende' : legendes[pick_a_number]})
 	
 def dev(request):
-	return render('dev.html')
+	return render('dev.html')  
+
 	       
 def dev_iphone(request):
 	return render('dev_iphone.html')
@@ -30,9 +31,9 @@ def incidents(request):
                               
 def stats(request):
 	def extract_date(entity):
-		return entity.time.date()
+		return entity.created.date()
 		  
-	entities = Incident.objects.order_by('time')
+	entities = Incident.objects.order_by('created')
 	                              
 	from itertools import groupby
 	data = [len(list(g)) for t, g in groupby(entities, key=extract_date)]                      
@@ -108,7 +109,7 @@ def get_incidents(request, scope):
 		filter_time = datetime.now() + timedelta(days=-1)
 	else:
 		return render('index.html')
-	return_objs = Incident.objects.filter(time__gte=filter_time).filter(validated=True).order_by('time').reverse()
+	return_objs = Incident.objects.filter(modified__gte=filter_time).filter(validated=True).order_by('created').reverse()
 	return render('get_incidents.html', {'incidents' : return_objs, 'scope':scope})
 
 def get_incident(request, id):

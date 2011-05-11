@@ -1,30 +1,40 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django import forms
-
+    
+class City(models.Model):
+	name = models.CharField(max_length=255)
+	
 class Line(models.Model):
 	name = models.CharField(max_length=255)
+	aliases = models.TextField(default="")
+	city = models.ForeignKey(City)
 	def __unicode__(self):
-		return "%s" % self.name
+		return "%s" % self.name     
 		
-class Station(models.Model):
+class Station(models.Model):       
 	name = models.CharField(max_length=255)
+	aliases = models.TextField(default="")
 	line = models.ForeignKey(Line)
-	
+	                                                        
 class Incident(models.Model):
 	line = models.ForeignKey(Line, blank=True, null=True, verbose_name="Ligne")
-	station = models.ForeignKey(Station, blank=True, null=True)
-	time = models.DateTimeField(auto_now=True)
-	plus = models.IntegerField(default=0)
-	minus = models.IntegerField(default=0)
-	ended = models.IntegerField(default=0)
+	station_start = models.ForeignKey(Station, null=True, blank=True, related_name="station_start")
+	station_end = models.ForeignKey(Station, null=True, blank=True, related_name="station_end")
+	created = models.DateTimeField(auto_now_add=True)
+	modified = models.DateTimeField(auto_now=True)
+	ended = models.DateTimeField(null=True, blank=True)
 	reason = models.TextField("Raison", help_text="Raison évoquée quant à l'incident", blank=True, null=True)
-	contributors = models.TextField()
-	validated = models.BooleanField(default=True)
-	
-	def __unicode__(self):
-		return "Incident<%s, %s>" % (str(self.line), self.time)
-		
+	source = models.TextField()
+	validated = models.BooleanField(default=True)  
+	level = models.IntegerField(default=5)             
+
+class IncidentVote(models.Model):
+	incident = models.ForeignKey(Incident)
+	created = models.DateTimeField(auto_now=True)
+	source = models.TextField()
+	vote = models.IntegerField()
+			
 class AddIncidentForm(forms.ModelForm):
 	contributors = forms.EmailField(label="Email", help_text="Indiquez votre adresse email pour valider la sauvegarde") 
 	class Meta:
