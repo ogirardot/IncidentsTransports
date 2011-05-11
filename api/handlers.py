@@ -3,12 +3,12 @@
 from piston.utils import throttle, rc
 from django.http import HttpResponse
 from piston.handler import BaseHandler
-from frontend.models import Incident, Line, AddIncidentForm     
+from frontend.models import Incident, IncidentVote, Line, AddIncidentForm, VOTE_PLUS, VOTE_MINUS, VOTE_ENDED     
 from django.shortcuts import render_to_response as render
 from datetime import datetime, timedelta 
 import re  
 encoding = "ISO-8859-1"
-BAD_WORDS = " chier| connard| bite| chatte| cul " 
+
 class IncidentWrapper(object):
 	def __init__(uid, line_name, time, plus, minus, ended, reason):
 		self.uid = uid
@@ -22,7 +22,6 @@ class IncidentWrapper(object):
 		
 class IncidentHandler(BaseHandler):
 	allowed_methods = ('GET',)
-	#fields = ('line', ('name',),), 'time', 'plus','minus', 'ended', 'id', 'reason')
 		
    	@throttle(30, 60)
 	def read(self, request, scope=None, incident_id=None):
@@ -59,9 +58,9 @@ class IncidentHandler(BaseHandler):
 			else:
 				return []  
 			if filter_time:
-				return_objs = Incident.objects.filter(time__gte=filter_time).filter(validated=True).order_by('time').reverse()
+				return_objs = Incident.objects.filter(created__gte=filter_time).filter(validated=True).order_by('modified').reverse()
 			else:
-				return_objs = Incident.objects.filter(validated=True).order_by('time').reverse()[:15] 
+				return_objs = Incident.objects.filter(validated=True).order_by('created').reverse()[:15] 
 			# filter out terminated events
 			if scope =="current":
 				return_objs = [ incident for incident in return_objs if not incident.ended > 3]
@@ -69,12 +68,12 @@ class IncidentHandler(BaseHandler):
 			'uid' : incident.id,
 			'line' : incident.line.name,
 			'line_id' : incident.line.id,
-			'last_modified_time' : incident.time,
-			'vote_plus' : incident.plus,
-			'vote_minus' : incident.minus,
-			'vote_ended' : incident.ended,
-			'status' : "Terminé" if incident.ended > 3 else "En cours...",
-			'reason' : incident.reason } for incident in return_objs] # Or base.filter(...)        
+			'last_modified_time' : incident.modified,
+			'vote_plus' : incident.plus(),
+			'vote_minus' : incident.minus(),
+			'vote_ended' : incident.ended(),
+			'status' : "Terminé" if incident.ended() > 3 else "En cours...",
+			'reason' : incident.reason } for incident in return_objs]       
 
 class LigneHandler(BaseHandler):
 	allowed_methods = ('GET', )
@@ -99,7 +98,6 @@ class IncidentCRUDHandler(BaseHandler):
 					line = Line.objects.get_or_create(name=data['line_name'].strip())[0]
 				if not line:
 					return rc.BAD_REQUEST                   
-				# check for bad words :    
 				comment = data['reason']
 				source = data['source']
 				incident = Incident(line=line, contributors=source, reason=comment)
@@ -124,11 +122,11 @@ class IncidentVoteHandler(BaseHandler):
 			try:                       
 				incident = Incident.objects.get(pk=incident_id)
 				if action == "plus":
-					return {"number": incident.plus}
+					return {"number": incident.plus()}
 				elif action == "minus":
-					return {"number": incident.minus}
+					return {"number": incident.minus()}
 				elif action == "end":
-					return {"number": incident.ended} 
+					return {"number": incident.ended()} 
 				else: return rc.BAD_REQUEST
 			except:
 				return rc.BAD_REQUEST
@@ -138,25 +136,33 @@ class IncidentVoteHandler(BaseHandler):
 		if incident_id:   
 			try:                       
 				incident = Incident.objects.get(pk=incident_id)
+				vote = IncidentVote(incident=incident) 
+				if 'source'in request.data:
+					vote.source = request.data['source']
+				else:
+					vote.source = request.META['REMOTE_ADDR']
+					
 				if action == "plus":
-					incident.plus += 1
-					if incident.plus - incident.minus > 3 and not incident.validated:
+					vote.vote = VOTE_PLUS
+					if incident.plus() - 3*incident.minus() > 3 and not incident.validated:
 						incident.validated = True
 				elif action =="minus":
-					incident.minus += 3
-					if incident.minus - incident.plus > 1:
+					vote.vote = VOTE_MINUS
+					if 3*incident.minus() - incident.plus() > 1:
 						incident.validated = False
 				elif action == "end":
-					incident.ended += 1
+					vote.vote = VOTE_ENDED
 				comments = request.session.get('commented', None)
-				if comments or incident.ended > 8:
-					if incident.ended > 8 or str(incident.id) in comments.split(","): 
+				if comments or incident.ended() > 8:
+					if incident.ended() > 8 or str(incident.id) in comments.split(","): 
 						return rc.ALL_OK
-					else:
+					else:          
 						incident.save()
+						vote.save()
 						request.session['commented'] += "," + str(incident.id)
-				else:
+				else:             
 					incident.save()
+					vote.save()
 					request.session['commented'] = str(incident.id)
 				return rc.CREATED
 			except Exception,e:
