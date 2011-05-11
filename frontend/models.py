@@ -27,8 +27,18 @@ class Incident(models.Model):
 	reason = models.TextField("Raison", help_text="Raison évoquée quant à l'incident", blank=True, null=True)
 	source = models.TextField()
 	validated = models.BooleanField(default=True)  
-	level = models.IntegerField(default=5)             
-
+	level = models.IntegerField(default=5)        
+	
+	def plus(self):
+		return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_PLUS).count()        
+	def minus(self):
+		return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_MINUS).count()
+	def ended(self):           
+		return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_ENDED).count()
+                                                                         
+VOTE_PLUS = 1
+VOTE_ENDED = 0
+VOTE_MINUS = -1
 class IncidentVote(models.Model):
 	incident = models.ForeignKey(Incident)
 	created = models.DateTimeField(auto_now=True)

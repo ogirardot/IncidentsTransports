@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect as redirect
 from django.shortcuts import get_object_or_404, render_to_response as render
 from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta
-from models import Station, Line, Incident, AddIncidentForm
+from models import Station, Line, Incident, IncidentVote, VOTE_PLUS, VOTE_MINUS, VOTE_ENDED, AddIncidentForm
 
 def index(request):
 	return render('index.html')
@@ -68,33 +68,37 @@ def add_incident(request):
 		return render('add_incident.html', {'form' : form})
 
 def incident_interact(request, id, action):
-	incident = Incident.objects.get(id=id)    
-	out = ""
+	incident = Incident.objects.get(id=id)  
+	vote = IncidentVote(incident=incident)
+	vote.source = request.META['REMOTE_ADDR']
+	out= ""
 	if action == "plus":
-		incident.plus += 1
-		if incident.plus - incident.minus > 3 and not incident.validated:
+		vote.vote = VOTE_PLUS
+		if incident.plus() + 1 - incident.minus() > 3 and not incident.validated:
 			incident.validated = True
-		out = incident.plus
+		out = incident.plus() + 1
 	elif action =="minus":
-		incident.minus += 3
-		if incident.minus - incident.plus > 1:
-			incident.validated = False
-		out = incident.minus
+		vote.vote = VOTE_MINUS
+		if incident.minus() - 3 - incident.plus() > 1:
+			incident.validated = False   
+		out = incident.minus() + 3
 	elif action == "end":
-		incident.ended += 1
-		out = incident.ended
+		vote.vote = VOTE_ENDED
+		out = incident.ended() + 1
 	comments = request.session.get('commented', None)
-	if comments or incident.ended > 8:
-		if incident.ended > 8 or str(incident.id) in comments.split(","): 
+	if comments or incident.ended() > 8:
+		if incident.ended() > 8 or str(incident.id) in comments.split(","): 
 			if action =="minus":
 				return HttpResponse(str(out-3))   
 			else:
 				return HttpResponse(str(out-1))
-		else:
+		else:   
 			incident.save()
+			vote.save()
 			request.session['commented'] += "," + str(incident.id)
 	else:
-		incident.save()
+		incident.save()  
+		vote.save()
 		request.session['commented'] = str(incident.id)
 	return HttpResponse(str(out))
 	
