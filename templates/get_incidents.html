@@ -54,7 +54,7 @@ function incident_interact(id, scope) {
 							{% for incident in incidents %}
 							<tr>
 								<td style="width: 70px;"><a href={% url frontend.views.get_incident incident.id %}>{{ incident.line }} {% if incident.ended > 3 %} (Terminé) {% endif %}</a></td>
-								<td style="width: 70px;">{{ incident.time|date:"D d M Y à H:i:s" }}</td>
+								<td style="width: 70px;">{{ incident.created|date:"D d M Y à H:i:s" }}</td>
 								<td>{{ incident.reason }}</td>
 								<td class="last">
 									<a title="j'y suis/j'y étais comme l'ont signalé {{incident.plus}} personnes" href="javascript:incident_interact({{ incident.id }}, 'plus')" class="button"><span>+1</span></a>

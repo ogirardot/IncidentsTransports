@@ -5,11 +5,18 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+	('Olivier Girardot', 'ssaboum@gmail.com'),
 )
 
 # django project root, automatically adapt to your on plateform
 DJANGO_ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
+
+# email parameters for reporting
+SERVER_EMAIL = "production@incidents-transports.com"
+EMAIL_HOST = "smtp.alwaysdata.com"
+
+# adding monitoring for broken links too   
+SEND_BROKEN_LINK_EMAILS = True
 
 LOCAL_DEVELOPMENT = True
 

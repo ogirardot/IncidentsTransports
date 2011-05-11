@@ -1,10 +1,8 @@
 from django.conf.urls.defaults import *  
 from django.contrib.sitemaps import Sitemap
+from django.contrib import admin           
 import settings
-
-# Uncomment the next two lines to enable the admin:
-from django.contrib import admin
-admin.autodiscover()       
+admin.autodiscover()                       
 
 # google sitemaps :
 sitemaps = {
@@ -28,7 +26,9 @@ urlpatterns = patterns('IncidentRATP.frontend.views',
     (r'^contribuer/twitter/?$', 'contribute_twitter'),
     (r'^contribuer/?$', 'contribute'),
     (r'^dev/iphone/?$', 'dev_iphone'),
-	(r'^dev/android/?$', 'dev_android'),
+	(r'^dev/android/?$', 'dev_android'), 
+	(r'^blog/', include('basic.blog.urls')),
+	(r'^comments/', include('django.contrib.comments.urls')),
     (r'^about/?$', 'about'),   
     (r'^home/?$', 'index'),
 	(r'^stats/?$', 'stats'),
