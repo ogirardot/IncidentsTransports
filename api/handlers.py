@@ -5,21 +5,13 @@ from django.http import HttpResponse
 from piston.handler import BaseHandler
 from frontend.models import Incident, IncidentVote, Line, AddIncidentForm, VOTE_PLUS, VOTE_MINUS, VOTE_ENDED     
 from django.shortcuts import render_to_response as render
-from datetime import datetime, timedelta 
-import re  
+from datetime import datetime, timedelta     
+import logging
+import re                                    
 encoding = "ISO-8859-1"
+		      
+logger = logging.getLogger(__name__)
 
-class IncidentWrapper(object):
-	def __init__(uid, line_name, time, plus, minus, ended, reason):
-		self.uid = uid
-		self.time = time
-		self.line = line_name
-		self.plus = plus
-		self.minus = minus
-		self.ended = ended
-		self.reason = reason 
-		self.status = "Terminé" if self.ended > 3 else "En cours..."
-		
 class IncidentHandler(BaseHandler):
 	allowed_methods = ('GET',)
 		
@@ -34,16 +26,7 @@ class IncidentHandler(BaseHandler):
 		
 		if incident_id:
 			incident = base.get(pk=incident_id)
-			return {
-                        'uid' : incident.id,
-                        'line' : incident.line.name,
-                        'line_id' : incident.line.id,
-                        'last_modified_time' : incident.time,
-                        'vote_plus' : incident.plus,
-                        'vote_minus' : incident.minus,
-                        'vote_ended' : incident.ended,
-                        'status' : "Terminé" if incident.ended > 3 else "En cours...",
-                        'reason' : incident.reason }
+			return incident.to_json()
 		else:
 			if scope == "minute":
 				filter_time = datetime.now() + timedelta(minutes=-1)
@@ -64,16 +47,7 @@ class IncidentHandler(BaseHandler):
 			# filter out terminated events
 			if scope =="current":
 				return_objs = [ incident for incident in return_objs if not incident.ended > 3]
-			return [{
-			'uid' : incident.id,
-			'line' : incident.line.name,
-			'line_id' : incident.line.id,
-			'last_modified_time' : incident.modified,
-			'vote_plus' : incident.plus(),
-			'vote_minus' : incident.minus(),
-			'vote_ended' : incident.ended(),
-			'status' : "Terminé" if incident.ended() > 3 else "En cours...",
-			'reason' : incident.reason } for incident in return_objs]       
+			return [ incident.to_json() for incident in return_objs]       
 
 class LigneHandler(BaseHandler):
 	allowed_methods = ('GET', )
@@ -83,24 +57,30 @@ class LigneHandler(BaseHandler):
 	def uid(klass, model): 
 		return model.pk
                   
-class IncidentCRUDHandler(BaseHandler):                 
+class IncidentCRUDHandler(BaseHandler): 
+	"""
+	This CRUD handler needs to be called with :
+		* line_id or line_name
+		* reason
+		* source 
+	"""                
 	allowed_methods = ('POST',)
 	model = Incident
 	@throttle(5, 5*60)
 	def create(self, request):   
-		print "called with request %s " % (request.content_type)
+		logger.info("called with request %s %s" % (request.content_type, request.data))
 		if request.content_type:
-			try:                                    
-				data = request.data                 
+			try:                                   
+				data = request.data            
 				if 'line_id' in data:
-					line = Line.objects.get(pk=int(data['line_id']))
+					line = Line.objects.get(pk=int(data['line_id'])) 
 				else:
 					line = Line.objects.get_or_create(name=data['line_name'].strip())[0]
 				if not line:
 					return rc.BAD_REQUEST                   
 				comment = data['reason']
 				source = data['source']
-				incident = Incident(line=line, contributors=source, reason=comment)
+				incident = Incident(line=line, source=source, reason=comment)
 				incident.save() 
 				return HttpResponse(str(incident.id), status=201)
 			except:
