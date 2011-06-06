@@ -17,7 +17,47 @@ class Station(models.Model):
 	aliases = models.TextField(default="")
 	line = models.ForeignKey(Line)
 	                                                        
-class Incident(models.Model):
+class Incident(models.Model):  
+	"""                   
+	Incident representation of problems on the network 
+	
+	# create incident
+	>>> i1 = Incident(line=Line.objects.get(pk=1), reason="Probleme dans le RER B", source="Android app", level=4)
+	>>> i1.save()    
+	   
+	# try json shortcut :
+	>>> i1.to_json()['status']
+	'Termin\\xc3\\xa9'
+	>>> i1.to_json()['line_id']
+	1
+	>>> i1.to_json()['line']
+	u'Metro 1'
+	>>> i1.to_json()['vote_plus']
+	0
+	>>> i1.to_json()['vote_minus']
+	0
+	>>> i1.to_json()['vote_ended']
+	0
+	>>> i1.to_json()['uid']
+	1
+	>>> i1.to_json()['reason']
+	'Probleme dans le RER B'
+	
+	# adding vote
+	>>> IncidentVote(incident=i1, source="android1", vote=VOTE_PLUS).save() 
+	>>> i1.plus()
+	1
+	
+	# minus
+	>>> IncidentVote(incident=i1, source="android2", vote=VOTE_MINUS).save()
+	>>> i1.minus()
+	3
+	
+	# ended
+	>>> IncidentVote(incident=i1, source="android3", vote=VOTE_ENDED).save()
+	>>> i1.ended()
+	1
+	"""
 	line = models.ForeignKey(Line, blank=True, null=True, verbose_name="Ligne")
 	station_start = models.ForeignKey(Station, null=True, blank=True, related_name="station_start")
 	station_end = models.ForeignKey(Station, null=True, blank=True, related_name="station_end")
@@ -32,13 +72,24 @@ class Incident(models.Model):
 	def plus(self):
 		return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_PLUS).count()        
 	def minus(self):
-		return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_MINUS).count()
+		return 3*IncidentVote.objects.filter(incident=self).filter(vote=VOTE_MINUS).count()
 	def ended(self):           
-		return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_ENDED).count()
+		return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_ENDED).count()    
+	def to_json(self):
+		return {'uid' : self.id,
+    			'line' : self.line.name,
+				'line_id' : self.line.id,
+				'last_modified_time' : self.modified,
+				'vote_plus' : self.plus(),
+				'vote_minus' : self.minus(),
+				'vote_ended' : self.ended(),
+				'status' : "Terminé" if self.ended > 3 else "En cours...",
+				'reason' : self.reason }
                                                                          
 VOTE_PLUS = 1
 VOTE_ENDED = 0
-VOTE_MINUS = -1
+VOTE_MINUS = -1    
+
 class IncidentVote(models.Model):
 	incident = models.ForeignKey(Incident)
 	created = models.DateTimeField(auto_now=True)
