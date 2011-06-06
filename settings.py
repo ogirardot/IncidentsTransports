@@ -5,7 +5,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    ('Olivier Girardot', 'ssaboum@gmail.com'),
 )
 
 # django project root, automatically adapt to your on plateform
@@ -75,7 +75,6 @@ SECRET_KEY = 'c%xt_h0yhy)n*q0xnmdm_db7qo%92$d&lnht&*kvbkxcy5^na5'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
 )
 
 
@@ -93,20 +92,19 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'IncidentRATP.urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
     DJANGO_ROOT_PATH + '/templates'
 )
-
+               
+OUR_APPS = (             
+	'frontend',
+	'api',
+)
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'IncidentRATP.frontend',
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'django.contrib.admindocs',
 	'basic.blog',
@@ -115,4 +113,41 @@ INSTALLED_APPS = (
 	'tagging',
 	'django.contrib.markup',
 	'django.contrib.comments',
-)
+) + OUR_APPS
+
+TEST_RUNNER = 'tests.run_tests'   
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'filters': {
+        'special': {
+            '()': 'project.logging.SpecialFilter',
+            'foo': 'bar',
+        }
+    },
+    'handlers': {
+        'null': {
+            'level':'DEBUG',
+            'class':'django.utils.log.NullHandler',
+        },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['special']
+        }
+    }
+}
