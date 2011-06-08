@@ -63,11 +63,15 @@ class IncidentCRUDHandler(BaseHandler):
 		* line_id or line_name
 		* reason
 		* source 
+		* level (int between 0 and 10, default is 5)
 	"""                
 	allowed_methods = ('POST',)
 	model = Incident
 	@throttle(5, 5*60)
-	def create(self, request):   
+	def create(self, request):
+		"""
+		Throttled to create only 5 incidents by 5 minutes.
+		"""   
 		logger.info("called with request %s %s" % (request.content_type, request.data))
 		if request.content_type:
 			try:                                   
@@ -79,8 +83,10 @@ class IncidentCRUDHandler(BaseHandler):
 				if not line:
 					return rc.BAD_REQUEST                   
 				comment = data['reason']
-				source = data['source']
+				source = data['source']                                     
 				incident = Incident(line=line, source=source, reason=comment)
+				if 'level' in data:
+					incident.level = int(data['level'])
 				incident.save() 
 				return HttpResponse(str(incident.id), status=201)
 			except:

@@ -1,6 +1,6 @@
 from django.test.client import Client     
 from frontend.models import Incident, Line, City
-import unittest
+import unittest    
 import re
 
 class IncidentTransportsAPITestCase(unittest.TestCase):
@@ -52,13 +52,22 @@ class IncidentTransportsAPITestCase(unittest.TestCase):
 		self.assertEqual(respo.status_code, 200)
 		
 class IncidentTransportsThrottleTestCase(unittest.TestCase):
-	def test_throttle(self):
+	#@unittest.skip("testing skipping") # only with python 2.7
+	def test_throttle_get_all(self):
 		c = Client()              
 		for i in range(24):
 			respo = c.get("/api/incidents.json/all")
 			self.assertEqual(respo.status_code, 200)
                          
 		respo = c.get("/api/incidents.json/all")
-		self.assertEqual(respo.status_code, 503)
+		self.assertEqual(respo.status_code, 503)   
+	
+	def test_throttle_post_incident(self):
+		c = Client()
+		for i in range(5):
+			respo = c.post("/api/incident", {'line_id' : 1, 'reason': "my heart know my reasons", 'source':"test_client"})
+			self.assertEqual(respo.status_code, 201)
+			
+			
 		
 		   	
