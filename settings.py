@@ -5,7 +5,6 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Olivier Girardot', 'ssaboum@gmail.com'),
 )
 
 # django project root, automatically adapt to your on plateform
