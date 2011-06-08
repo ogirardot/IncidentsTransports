@@ -68,7 +68,7 @@ class Incident(models.Model):
 	source = models.TextField()
 	validated = models.BooleanField(default=True)  
 	level = models.IntegerField(default=5)   
-	duplicate_of = models.ForeignKey(Incident)     
+	#duplicate_of = models.ForeignKey(Incident)     
 	
 	def plus_count(self):
 		return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_PLUS).count()        
