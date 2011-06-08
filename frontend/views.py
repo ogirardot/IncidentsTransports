@@ -74,20 +74,20 @@ def incident_interact(request, id, action):
 	out= ""
 	if action == "plus":
 		vote.vote = VOTE_PLUS
-		if incident.plus() + 1 - incident.minus() > 3 and not incident.validated:
+		if incident.plus_count() + 1 - incident.minus_count() > 3 and not incident.validated:
 			incident.validated = True
-		out = incident.plus() + 1
+		out = incident.plus_count() + 1
 	elif action =="minus":
 		vote.vote = VOTE_MINUS
-		if incident.minus() - 3 - incident.plus() > 1:
+		if incident.minus_count() - 3 - incident.plus_count() > 1:
 			incident.validated = False   
-		out = incident.minus() + 3
+		out = incident.minus_count() + 3
 	elif action == "end":
 		vote.vote = VOTE_ENDED
-		out = incident.ended() + 1
+		out = incident.ended_count() + 1
 	comments = request.session.get('commented', None)
-	if comments or incident.ended() > 8:
-		if incident.ended() > 8 or str(incident.id) in comments.split(","): 
+	if comments or incident.ended_count() > 8:
+		if incident.ended_count() > 8 or str(incident.id) in comments.split(","): 
 			if action =="minus":
 				return HttpResponse(str(out-3))   
 			else:
