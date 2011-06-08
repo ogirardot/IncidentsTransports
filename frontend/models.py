@@ -67,7 +67,8 @@ class Incident(models.Model):
 	reason = models.TextField("Raison", help_text="Raison évoquée quant à l'incident", blank=True, null=True)
 	source = models.TextField()
 	validated = models.BooleanField(default=True)  
-	level = models.IntegerField(default=5)        
+	level = models.IntegerField(default=5)   
+	duplicate_of = models.ForeignKey(Incident)     
 	
 	def plus_count(self):
 		return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_PLUS).count()        

@@ -6,7 +6,7 @@ admin.autodiscover()
 
 # google sitemaps :
 sitemaps = {
-	
+	#TODO
 }
 
 # handler404 :
