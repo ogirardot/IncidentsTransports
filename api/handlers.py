@@ -33,7 +33,7 @@ class IncidentHandler(BaseHandler):
 			elif scope == "hour":
 				filter_time = datetime.now() + timedelta(hours=-1)
 			elif scope == "day":    
-				filter_time = datetime.now().date() 
+				filter_time = datetime.now().date() + timedelta(hours=+3) 
 			elif scope == "all":
 				filter_time = None  
 			elif scope == "current":
