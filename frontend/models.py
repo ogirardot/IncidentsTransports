@@ -27,7 +27,7 @@ class Incident(models.Model):
 	   
 	# try json shortcut :
 	>>> i1.to_json()['status']
-	'Termin\\xc3\\xa9'
+	'En cours...'
 	>>> i1.to_json()['line_id']
 	1
 	>>> i1.to_json()['line']
@@ -45,17 +45,17 @@ class Incident(models.Model):
 	
 	# adding vote
 	>>> IncidentVote(incident=i1, source="android1", vote=VOTE_PLUS).save() 
-	>>> i1.plus()
+	>>> i1.plus_count()
 	1
 	
 	# minus
 	>>> IncidentVote(incident=i1, source="android2", vote=VOTE_MINUS).save()
-	>>> i1.minus()
+	>>> i1.minus_count()
 	3
 	
 	# ended
 	>>> IncidentVote(incident=i1, source="android3", vote=VOTE_ENDED).save()
-	>>> i1.ended()
+	>>> i1.ended_count()
 	1
 	"""
 	line = models.ForeignKey(Line, blank=True, null=True, verbose_name="Ligne")
@@ -69,21 +69,23 @@ class Incident(models.Model):
 	validated = models.BooleanField(default=True)  
 	level = models.IntegerField(default=5)        
 	
-	def plus(self):
+	def plus_count(self):
 		return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_PLUS).count()        
-	def minus(self):
+	def minus_count(self):
 		return 3*IncidentVote.objects.filter(incident=self).filter(vote=VOTE_MINUS).count()
-	def ended(self):           
+	def ended_count(self):           
 		return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_ENDED).count()    
 	def to_json(self):
 		return {'uid' : self.id,
     			'line' : self.line.name,
 				'line_id' : self.line.id,
-				'last_modified_time' : self.modified,
-				'vote_plus' : self.plus(),
-				'vote_minus' : self.minus(),
-				'vote_ended' : self.ended(),
-				'status' : "Terminé" if self.ended > 3 else "En cours...",
+				'last_modified_time' : self.modified, 
+				'creation_time': self.created,
+				'end_time': self.ended,
+				'vote_plus' : self.plus_count(),
+				'vote_minus' : self.minus_count(),
+				'vote_ended' : self.ended_count(),
+				'status' : "Terminé" if self.ended_count() > 3 else "En cours...",
 				'reason' : self.reason }
                                                                          
 VOTE_PLUS = 1
