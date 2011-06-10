@@ -30,7 +30,7 @@ class IncidentHandler(BaseHandler):
         
         """
         base = Incident.objects
-        
+                                           
         if incident_id:
             incident = base.get(pk=incident_id)
             return incident.to_json()
@@ -47,9 +47,13 @@ class IncidentHandler(BaseHandler):
                 filter_time = datetime.now() + timedelta(days=-1)
             else:
                 return []    
-            # add order_field param :
-            if order_field not in ORDER_FIELD_VALUES:
-                return rc.BAD_REQUEST
+            # add order_field param from get request : 
+            if 'sort_by' in request.GET:
+                order_field = request.GET['sort_by']
+                if order_field not in ORDER_FIELD_VALUES:
+                    return rc.BAD_REQUEST 
+                else:
+                    pass
             
             if filter_time:
                 return_objs = Incident.objects.filter(created__gte=filter_time).filter(validated=True).order_by(ORDER_FIELD_VALUES[order_field]).reverse()
