@@ -1,3 +1,6 @@
 [submodule "dependencies/piston"]
 	path = dependencies/piston
 	url = https://github.com/mozilla/django-piston.git
+[submodule "django-basic-apps"]
+	path = django-basic-apps
+	url = git://github.com/nathanborror/django-basic-apps.git
