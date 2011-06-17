@@ -69,7 +69,12 @@ class Incident(models.Model):
 	validated = models.BooleanField(default=True)  
 	level = models.IntegerField(default=5)   
 	#duplicate_of = models.ForeignKey(Incident)     
-	
+	                           
+	def compute_relevance(self):
+		return 100 + self.plus_count() * 10 - self.minus_count() * 15 - self.ended_count() * 20 - self.compute_hours_since_report()
+	def compute_hours_since_report(self):
+		from datetime import datetime
+		return (datetime.now() - self.created).seconds / 60
 	def plus_count(self):
 		return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_PLUS).count()        
 	def minus_count(self):
@@ -78,6 +83,7 @@ class Incident(models.Model):
 		return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_ENDED).count()    
 	def to_json(self):
 		return {'uid' : self.id,
+				'relevance_score' : self.compute_relevance(),
     			'line' : self.line.name,
 				'line_id' : self.line.id,
 				'last_modified_time' : self.modified, 
