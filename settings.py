@@ -88,7 +88,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'IncidentRATP.urls'
+ROOT_URLCONF = 'IncidentsTransports.urls'
 
 TEMPLATE_DIRS = (
     DJANGO_ROOT_PATH + '/templates'

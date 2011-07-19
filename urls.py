@@ -10,10 +10,10 @@ sitemaps = {
 }
 
 # handler404 :
-handler404 = 'IncidentRATP.frontend.views.handler_404'
+handler404 = 'frontend.views.handler_404'
 
-urlpatterns = patterns('IncidentRATP.frontend.views',
-    (r'^api/', include('IncidentRATP.api.urls')),
+urlpatterns = patterns('frontend.views',
+    (r'^api/', include('api.urls')),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^services/?$', 'services'),
