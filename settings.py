@@ -82,8 +82,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
@@ -112,6 +110,8 @@ INSTALLED_APPS = (
 	'tagging',
 	'django.contrib.markup',
 	'django.contrib.comments',
+    'sentry',
+    'sentry.client',
 ) + OUR_APPS
 
 TEST_RUNNER = 'tests.run_tests'   
@@ -150,3 +150,16 @@ LOGGING = {
         }
     }
 }
+
+import logging
+from sentry.client.handlers import SentryHandler
+
+logger = logging.getLogger()
+# ensure we havent already registered the handler
+if SentryHandler not in map(lambda x: x.__class__, logger.handlers):
+    logger.addHandler(SentryHandler())
+
+    # Add StreamHandler to sentry's default so you can catch missed exceptions
+    logger = logging.getLogger('sentry.errors')
+    logger.propagate = False
+    logger.addHandler(logging.StreamHandler())
