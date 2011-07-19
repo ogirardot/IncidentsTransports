@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from piston.resource import Resource
-from IncidentRATP.api.handlers import IncidentHandler, IncidentCRUDHandler, LigneHandler, IncidentVoteHandler
+from api.handlers import IncidentHandler, IncidentCRUDHandler, LigneHandler, IncidentVoteHandler
 
 incident_handler = Resource(IncidentHandler)
 crud_incident_handler = Resource(IncidentCRUDHandler)    
