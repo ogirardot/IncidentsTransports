@@ -4,11 +4,14 @@ from django import forms
     
 class City(models.Model):
 	name = models.CharField(max_length=255)
+	                                 
+def get_Paris():
+	return City.objects.get(pk=1)
 	
 class Line(models.Model):
 	name = models.CharField(max_length=255)
 	aliases = models.TextField(default="")
-	city = models.ForeignKey(City)
+	city = models.ForeignKey(City, default=get_Paris)
 	def __unicode__(self):
 		return "%s" % self.name     
 		
