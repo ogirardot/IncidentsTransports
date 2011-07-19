@@ -7,6 +7,7 @@ from frontend.models import Incident, IncidentVote, Line, AddIncidentForm, VOTE_
 from django.shortcuts import render_to_response as render
 from datetime import datetime, timedelta
 import logging
+import sys
 import re
 encoding = "ISO-8859-1"
 
@@ -88,15 +89,24 @@ class IncidentCRUDHandler(BaseHandler):
         """
         Throttled to create only 5 incidents by 5 minutes.
         """
-        logger.info("called with request %s %s" % (request.content_type, request.data))
         if request.content_type:
             try:
                 data = request.data
+                line = None
                 if 'line_id' in data:
                     line = Line.objects.get(pk=int(data['line_id']))
-                else:
+                elif 'line_name' in data:
                     line = Line.objects.get_or_create(name=data['line_name'].strip())[0]
                 if not line:
+                    logger.error('Incident CRUD Handler got request with no line', exc_info=sys.exc_info(),
+                      extra={
+                          'request': request,
+                          'url': request.build_absolute_uri(),
+                          'data': {
+                              'content_type': request.content_type,
+                              'data': data
+                          }
+                      })
                     return rc.BAD_REQUEST
                 comment = data['reason']
                 source = data['source']
@@ -106,16 +116,34 @@ class IncidentCRUDHandler(BaseHandler):
                 incident.save()
                 return HttpResponse(str(incident.id), status=201)
             except:
+                logger.error('Incident CRUD Handler failed to process external request', exc_info=sys.exc_info(),
+                      extra={
+                          'request': request,
+                          'url': request.build_absolute_uri(),
+                          'data': {
+                              'content_type': request.content_type,
+                              'data': data
+                          }
+                      })
                 return rc.BAD_REQUEST
         else:
-            form = AddIncidentForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return render('thanks.html', {'number': Incident.objects.count()});
-            else:
-                resp = rc.BAD_REQUEST
-                resp.write("Incorrect parameters, submitted form is invalid.")
-                return resp
+            try:
+                form = AddIncidentForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return render('thanks.html', {'number': Incident.objects.count()});
+                else:
+                    resp = rc.BAD_REQUEST
+                    resp.write("Incorrect parameters, submitted form is invalid.")
+                    return resp
+            except:
+                logger.error("Incident form submitted failed to be validated",
+                             exc_info=sys.exc_info(), extra= {
+                                 'request': request,
+                                 'url': request.build_absolute_uri(),
+                                 'data': request.POST
+                             })
+                return rc.BAD_REQUEST
 
 class IncidentVoteHandler(BaseHandler):
     allowed_methods = ('GET', 'POST')
@@ -171,12 +199,3 @@ class IncidentVoteHandler(BaseHandler):
                 print e
                 return rc.BAD_REQUEST
         else: return rc.BAD_REQUEST
-            
-            
-            
-            
-            
-            
-            
-            
-            

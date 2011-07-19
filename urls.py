@@ -14,6 +14,7 @@ handler404 = 'frontend.views.handler_404'
 
 urlpatterns = patterns('frontend.views',
     (r'^api/', include('api.urls')),
+    (r'^sentry/', include('sentry.web.urls')),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^services/?$', 'services'),
