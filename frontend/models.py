@@ -58,7 +58,7 @@ class Incident(models.Model):
 	>>> i1.ended_count()
 	1
 	"""
-	line = models.ForeignKey(Line, blank=True, null=True, verbose_name="Ligne")
+	line = models.ForeignKey(Line, null=True, verbose_name="Ligne")
 	station_start = models.ForeignKey(Station, null=True, blank=True, related_name="station_start")
 	station_end = models.ForeignKey(Station, null=True, blank=True, related_name="station_end")
 	created = models.DateTimeField(auto_now_add=True)
