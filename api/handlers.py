@@ -199,3 +199,37 @@ class IncidentVoteHandler(BaseHandler):
                 print e
                 return rc.BAD_REQUEST
         else: return rc.BAD_REQUEST
+              
+class IncidentDuplicateHandler(BaseHandler):
+    allowed_methods = ('POST')  
+    def create(self, request):
+        if 'ref_id' in request.POST and 'duplicate_id' in request.POST:
+            # sanity checks
+            # existing incidents
+            ref_count = Incident.objects.filter(pk=int(request.POST['ref_id'])).count()
+            duplicate_count = Incident.objects.filter(pk=int(request.POST['duplicate_id'])).count()
+            if not ref_count or not duplicate_count:
+                logger.error('Incident Duplicate Handler - no existing incidents', exc_info=sys.exc_info(),
+                      extra={
+                          'request': request,
+                          'url': request.build_absolute_uri(),
+                          'ref_count' : ref_count,
+                          'duplicate_count': duplicate_count,
+                })
+                return rc.NOT_FOUND                                                       
+            ref = Incident.objects.get(pk=int(request.POST['ref_id']))
+            duplicate = Incident.objects.get(pk=int(request.POST['duplicate_id']))
+            # same line :    
+            if ref.line != duplicate.line:
+                return rc.BAD_REQUEST
+            # same day :
+            duplicate.duplicate_of = ref
+            duplicate.save()
+            return rc.CREATED
+        else:  
+            logger.error('Incident Duplicate Handler got bad request', exc_info=sys.exc_info(),
+                  extra={
+                      'request': request,
+                      'url': request.build_absolute_uri()
+                  })
+            return rc.BAD_REQUEST
