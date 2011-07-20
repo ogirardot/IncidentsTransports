@@ -110,6 +110,8 @@ INSTALLED_APPS = (
 	'tagging',
 	'django.contrib.markup',
 	'django.contrib.comments',
+    'nexus',
+    'gargoyle',
     'sentry',
     'sentry.client',
 ) + OUR_APPS
