@@ -2,7 +2,11 @@ from django.conf.urls.defaults import *
 from django.contrib.sitemaps import Sitemap
 from django.contrib import admin           
 import settings
+import nexus
+import gargoyle
 admin.autodiscover()                       
+nexus.autodiscover()
+gargoyle.autodiscover()
 
 # google sitemaps :
 sitemaps = {
@@ -15,6 +19,7 @@ handler404 = 'frontend.views.handler_404'
 urlpatterns = patterns('frontend.views',
     (r'^api/', include('api.urls')),
     (r'^sentry/', include('sentry.web.urls')),
+    ('^nexus/', include(nexus.site.urls)),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^services/?$', 'services'),
