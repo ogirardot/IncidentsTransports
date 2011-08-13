@@ -119,3 +119,7 @@ def get_incidents(request, scope):
 def get_incident(request, id):
 	incident = get_object_or_404(Incident, pk=id)                      
 	return render('detail_incident.html', {'incident' :  incident}) 
+
+def disqus_mobile(request, id):
+	incident = get_object_or_404(Incident, pk=id)                      
+	return render('disqus.html', {'incident' :  incident}) 	
