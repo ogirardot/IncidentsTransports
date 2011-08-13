@@ -1,3 +1,7 @@
 *.pyc
 *.db
 *.sqlite
+.project
+.pydevproject
+basic
+src
