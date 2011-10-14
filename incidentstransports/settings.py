@@ -47,16 +47,14 @@ USE_L10N = True
 # Project URLS and media settings
 #==============================================================================
 
-ROOT_URLCONF = 'appartinfo.conf.urls'
+ROOT_URLCONF = 'incidentstransports.urls'
                                               
 # auth property to associate profile to Users :
-AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+#AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 LOGIN_URL = '/accounts/login/'                
             
 # adding auth backends to use with the social-auth
 AUTHENTICATION_BACKENDS = (            
-    'accounts.backends.HashBasedAuthentificationBackend',  
-	'accounts.backends.EmailBasedAuthentificationBackend',
 	'django.contrib.auth.backends.ModelBackend',
     'social_auth.backends.twitter.TwitterBackend', 
     'social_auth.backends.facebook.FacebookBackend',
@@ -68,8 +66,8 @@ LOGIN_REDIRECT_URL = '/'
 MEDIA_URL = '/uploads/'
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(DJANGO_ROOT_PATH, 'static')
-
+STATIC_ROOT = os.path.join(DJANGO_ROOT_PATH, 'staticfiles')
+                   
 STATICFILES_DIRS = (
     os.path.join(DJANGO_ROOT_PATH, 'static'),
 )
@@ -141,7 +139,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',  
+    'maintenancemode.middleware.MaintenanceModeMiddleware',
 )     
 
 #==============================================================================
@@ -185,5 +184,14 @@ INSTALLED_APPS = (
 	#django registration app
 	'registration',   
 	# piston rest api
-	'piston', 
-) + PROJECT_APPS
+	'piston',
+	'maintenancemode', 
+) + PROJECT_APPS      
+
+# for debug toolbar
+INTERNAL_IPS = ('127.0.0.1',)
+                
+# adding debug toolbar :
+DEBUG_TOOLBAR_CONFIG = { 'INTERCEPT_REDIRECTS': False }
+MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)                                               
+INSTALLED_APPS += ('debug_toolbar','django_jenkins', )

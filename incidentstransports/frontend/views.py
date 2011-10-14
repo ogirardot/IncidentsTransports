@@ -1,34 +1,20 @@
 import random, re
 from django.http import HttpResponse, HttpResponseRedirect as redirect
-from django.shortcuts import get_object_or_404, render_to_response as render
+from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta
 from models import Station, Line, Incident, IncidentVote, VOTE_PLUS, VOTE_MINUS, VOTE_ENDED, AddIncidentForm
-
-def index(request):
-	return render('index.html')
+from frontend.utils import render
 	
 def handler_404(request):
 	images = ["1293872626292.jpg", "1293878551093.jpg" ]
 	legendes = ["Mais pourquoi sont-ils aussi mechant ?!", "rien a dire d'autre..."]
 	pick_a_number = random.randint(0, len(images))-1
-	return render('404.html' , { 'image' : images[pick_a_number], 'legende' : legendes[pick_a_number]})
-	
-def dev(request):
-	return render('dev.html')  
-
-	       
-def dev_iphone(request):
-	return render('dev_iphone.html')
+	return render(request, '404.html' , { 'image' : images[pick_a_number], 'legende' : legendes[pick_a_number]})
+	                       
 def load_test(request):
 	return HttpResponse("42")
-                                       
-def dev_android(request):
-	return render('dev_android.html')
-	
-def incidents(request):
-	return render('incidents.html')
-                              
+                                           
 def stats(request):
 	def extract_date(entity):
 		return entity.created.date()
@@ -38,23 +24,8 @@ def stats(request):
 	from itertools import groupby
 	data = [len(list(g)) for t, g in groupby(entities, key=extract_date)]                      
 	labels = []
-	return render('stats.html', {'data': data,'labels': labels})    
-
-def contribute(request):
-	return render('contribute.html')
-
-def services(request):
-	return render('contribute.html')
-
-def about(request):
-	return render('team.html')
-
-def contribute_donate(request):
-	return render('donate.html')
-
-def contribute_twitter(request):
-	return render('twitter.html')
-	                                
+	return render(request, 'stats.html', {'data': data,'labels': labels})    
+                  	                                
 def add_incident(request):
 	if request.method == "POST":
 		form = AddIncidentForm(request.POST)
@@ -65,7 +36,7 @@ def add_incident(request):
 			return render('add_incident.html', {'form' : form})
 	else:
 		form = AddIncidentForm()
-		return render('add_incident.html', {'form' : form})
+		return render(request, 'add_incident.html', {'form' : form})
 
 def incident_interact(request, id, action):
 	incident = Incident.objects.get(id=id)  
@@ -114,12 +85,12 @@ def get_incidents(request, scope):
 	else:
 		return render('index.html')
 	return_objs = Incident.objects.filter(modified__gte=filter_time).filter(validated=True).order_by('created').reverse()
-	return render('get_incidents.html', {'incidents' : return_objs, 'scope':scope})
+	return render(request, 'get_incidents.html', {'incidents' : return_objs, 'scope':scope})
 
 def get_incident(request, id):
 	incident = get_object_or_404(Incident, pk=id)                      
-	return render('detail_incident.html', {'incident' :  incident}) 
+	return render(request, 'detail_incident.html', {'incident' :  incident}) 
 
 def disqus_mobile(request, id):
 	incident = get_object_or_404(Incident, pk=id)                      
-	return render('disqus.html', {'incident' :  incident}) 	
+	return render(request, 'disqus.html', {'incident' :  incident}) 	

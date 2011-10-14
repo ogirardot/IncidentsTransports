@@ -8,10 +8,10 @@
 		<div class="header page">
 			<h1>Incidents</h1>
 			<ul>
-				<li class="active"><a href="{% url frontend.views.incidents %}">Incidents</a></li>
+				<li class="active"><a href="{% url incidents %}">Incidents</a></li>
 				<li><a href="{% url frontend.views.get_incidents 'hour'%}">Par heure</a></li>
 				<li><a href="{% url frontend.views.get_incidents 'day'%}">Par 24h</a></li>
-				<li><a href="{% url frontend.views.add_incident %}">Ajouter</a></li>
+				<li><a href="{% url add_incident %}">Ajouter</a></li>
 			</ul>
 		</div>
 		
@@ -39,7 +39,7 @@
 				<div class="sidebar_box">
 					<h4>Contribuer</h4>
 					<ul>
-						<li><a href="{% url frontend.views.add_incident %}">Ajouter un incident</a></li>
+						<li><a href="{% url add_incident %}">Ajouter un incident</a></li>
 					</ul>
 				</div>
 				<div class="sidebar_box">

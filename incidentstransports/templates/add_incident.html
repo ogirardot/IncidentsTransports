@@ -13,8 +13,8 @@
 </style>
 {% endblock %}    
 {% block extra_js %}
-<script type="text/javascript" src="/site_media/js/mootools-core-1.3-full-nocompat-yc.js"></script> 
-<script type="text/javascript" src="/site_media/js/mootools-more-1.3-with_forms.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/mootools-core-1.3-full-nocompat-yc.js"></script> 
+<script type="text/javascript" src="{{ STATIC_URL }}js/mootools-more-1.3-with_forms.js"></script>
 <script type="text/javascript" charset="utf-8"> 
 window.addEvent('domready', function() {    	
 	$('send').addEvent( 'click', function(evt){

@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block title %}<h1>Statistiques</h1>{% endblock %}   
 {% block extra_js %} 
-<script type="text/javascript" src="/site_media/js/raphael-min.js"></script>
-<script type="text/javascript" src="/site_media/js/g.raphael-min.js"></script> 
-<script type="text/javascript" src="/site_media/js/g.bar-min.js"></script>
-<script type="text/javascript" src="/site_media/js/g.dot-min.js"></script>
-<script type="text/javascript" src="/site_media/js/g.line-min.js"></script>
-<script type="text/javascript" src="/site_media/js/g.pie-min.js"></script> 
+<script type="text/javascript" src="{{ STATIC_URL }}js/raphael-min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/g.raphael-min.js"></script> 
+<script type="text/javascript" src="{{ STATIC_URL }}js/g.bar-min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/g.dot-min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/g.line-min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/g.pie-min.js"></script> 
 <script type="text/javascript"> 
 
 function drawChart() {

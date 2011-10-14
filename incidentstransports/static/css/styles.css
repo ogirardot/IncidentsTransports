@@ -75,13 +75,13 @@ div.page {
 	position: relative;
 }
 div#header {
-	background: url('/site_media/images/header_bg.gif') repeat-x top;
+	background: url('/static/images/header_bg.gif') repeat-x top;
 	height: 150px;
 }
 	div#header a.logo{ 
 		float: left; 
 		margin-top: 25px; 
-		background: url('/site_media/images/logo.jpg') no-repeat top;
+		background: url('/static/images/logo.jpg') no-repeat top;
 		width: 300px;
 		height: 57px;
 		text-indent: -999999px;
@@ -113,7 +113,7 @@ div#page {
 	margin-top: -33px;
 }
 	div#page .header{ 
-		background: url('/site_media/images/page_header.gif') repeat-x top;
+		background: url('/static/images/page_header.gif') repeat-x top;
 		height: 60px;
 	}
 		div#page .header h1{ padding-left: 30px; padding-top: 5px; }
@@ -125,7 +125,7 @@ div#page {
 				display: block;
 			}
 			div#page .header ul li.active {
-				background: url('/site_media/images/sub_menu-left.png') no-repeat top left;
+				background: url('/static/images/sub_menu-left.png') no-repeat top left;
 			}
 				div#page .header ul li a {
 					font-size: 14px;
@@ -138,13 +138,13 @@ div#page {
 				}
 				div#page .header ul li.active a {
 					color: #464646;
-					background: url('/site_media/images/sub_menu-right.png') no-repeat top right;
+					background: url('/static/images/sub_menu-right.png') no-repeat top right;
 				}
 				div#page .header ul li a:hover {
 					color: #555;
 				}
 	div#page .header_home{ 
-		background: url('/site_media/images/home_header.gif') repeat-x bottom;
+		background: url('/static/images/home_header.gif') repeat-x bottom;
 		height: 320px;
 		position: relative;
 	}	
@@ -168,11 +168,11 @@ div#page {
 			div#page .header_home .info p{ font-size: 13px; color: #363636; margin-bottom: 30px; }
 			div#page .header_home .info .trial { font-size: 11px; color: #7d7d7d; margin-left: 12px; }
 	div#page .top {
-		background: url('/site_media/images/page_top.gif') no-repeat top;
+		background: url('/static/images/page_top.gif') no-repeat top;
 		height: 23px;
 	}
 	div#page .content {
-		background: url('/site_media/images/page_middle.gif') repeat-y top;
+		background: url('/static/images/page_middle.gif') repeat-y top;
 	}
 		div#page .content .padding {
 			padding: 25px 25px 25px 45px;
@@ -186,7 +186,7 @@ div#page {
 			float: right;
 		}
 	div#page .bottom {
-		background: url('/site_media/images/page_bottom.gif') no-repeat bottom;
+		background: url('/static/images/page_bottom.gif') no-repeat bottom;
 		height: 23px;	
 	}
 	div#page .section_title {
@@ -237,7 +237,7 @@ div.sidebar_box {
 	div.sidebar_box ul { list-style: circle; padding-left: 16px; margin-top: 10px; }
 		div.sidebar_box ul li { margin-bottom: 5px; }
 	div.sidebar_box a.rss { 
-		background: url('/site_media/images/icons/rss.png') no-repeat top left;
+		background: url('/static/images/icons/rss.png') no-repeat top left;
 		padding-left: 22px;
 		text-decoration: none;
 		color: #444;
@@ -265,7 +265,7 @@ div#screenshots a.controls {
 	width: 17px;
 	height: 31px;
 	text-indent: -999999px;
-	background: url('/site_media/images/slide-controls.gif') no-repeat top;
+	background: url('/static/images/slide-controls.gif') no-repeat top;
 }
 	div#screenshots a.prev {
 		background-position: top left;
@@ -282,7 +282,7 @@ div#screenshots a.controls {
 div#screenshots .items ul{ list-style: none; float: left; }
 	div#screenshots .items ul li {
 		float:left;
-		background: url('/site_media/images/screenshot_bg.gif') no-repeat top left;
+		background: url('/static/images/screenshot_bg.gif') no-repeat top left;
 		width: 155px;
 		height: 110px;
 		margin-right: 25px;
@@ -371,7 +371,7 @@ div#price_table {
 		text-align: center;
 	} 
 		div#price_table table thead{
-			background: #ededed url('/site_media/images/table_header.gif') repeat-x bottom;
+			background: #ededed url('/static/images/table_header.gif') repeat-x bottom;
 		}
 		div#price_table table thead td {
 			padding: 15px 0px 15px 0px;
@@ -412,7 +412,7 @@ div#signup { }
 	div#signup h2 {
 		font-size: 14px;
 		font-weight: bold;
-		background: url('/site_media/images/hr.gif') repeat-x 0px 10px;
+		background: url('/static/images/hr.gif') repeat-x 0px 10px;
 		margin-bottom: 15px;
 	}
 		div#signup h2 span {
@@ -448,7 +448,7 @@ Blog
 ---------------------------------------------*/
 div#blog {}
 	div#blog .post {
-		background: url('/site_media/images/hr.gif') repeat-x bottom;
+		background: url('/static/images/hr.gif') repeat-x bottom;
 		padding-bottom: 30px;
 		margin-bottom: 30px;
 	}
@@ -460,7 +460,7 @@ div#blog {}
 	div#blog .blog_img {
 		width: 621px;
 		height: 184px;
-		background: url('/site_media/images/blog_img_bg.gif') no-repeat top;
+		background: url('/static/images/blog_img_bg.gif') no-repeat top;
 		margin-left: -15px;
 	}
 		div#blog .blog_img img{ padding: 17px 0px 0px 19px; }
@@ -470,7 +470,7 @@ div#blog {}
 	}
 	div#blog .read_more { float: right; margin-top: -10px; }
 	div#blog a.comments {
-		background: url('/site_media/images/icons/comment.png') no-repeat top left;
+		background: url('/static/images/icons/comment.png') no-repeat top left;
 		padding-left: 22px;
 		float: left;
 		font-size: 12px;
@@ -525,7 +525,7 @@ div#page p {
 }
 div.wrap_image_left,
 div.wrap_image_right {
-	background: url('/site_media/images/about_img_bg.gif') no-repeat top;
+	background: url('/static/images/about_img_bg.gif') no-repeat top;
 	width: 317px;
 	height: 187px;
 }
@@ -547,7 +547,7 @@ Forms
 form .text_field{
 	padding: 10px;
 	border: 1px solid #d6d6d6;
-	background: #fff url('/site_media/images/tf_bg.gif') repeat-x top;
+	background: #fff url('/static/images/tf_bg.gif') repeat-x top;
 	font-size: 13px;
 	font-style: italic;
 	color: #999;
