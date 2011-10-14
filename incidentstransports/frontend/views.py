@@ -96,8 +96,4 @@ def disqus_mobile(request, id):
 	return render(request, 'disqus.html', {'incident' :  incident}) 	   
 	
 def archives(request):                                       
-	incidents = Incident.objects.all() 
-	out = []
-	for i in range(1000):
-		out.extend(incidents)
-	return render(request, 'incidents/archives.html', {'incidents': out})
+	return render(request, 'incidents/archives.html', {'incidents': Incident.objects.all() })
