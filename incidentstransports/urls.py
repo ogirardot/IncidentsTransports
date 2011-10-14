@@ -4,6 +4,7 @@ from django.contrib import admin
 import settings
 import nexus
 import gargoyle
+
 admin.autodiscover()                       
 nexus.autodiscover()
 gargoyle.autodiscover()
