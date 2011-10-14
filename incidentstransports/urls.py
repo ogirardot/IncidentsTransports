@@ -41,8 +41,13 @@ urlpatterns = patterns('',
 # frontend :
 urlpatterns += patterns('frontend.views',                        
 	url(r'^incident/add', 'add_incident', name='add_incident'),
-    url(r'^incidents/(?P<scope>[a-z]*)', 'get_incidents'),
-    url(r'^incident/detail/(?P<id>[0-9]*)/?$', 'get_incident'),
+    url(r'^incidents/(?P<scope>[a-z]*)', 'get_incidents'),     
+    # this one is deprecated :
+    url(r'^incident/detail/(?P<incident_id>[0-9]*)/?$', 'get_incident'),
+	# this is the more SEO friendly version :
+	url(r'^incident/detail/(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<line_slug>[-\w]+)_(?P<line_id>[0-9]+)/(?P<incident_slug>[-\w]+)_(?P<incident_id>[0-9]+)/$',
+	        view='get_incident', name='get_incident_url'
+	    ),
     url(r'^incident/action/(?P<id>[0-9]*)/(?P<action>[a-z]*)', 'incident_interact'),
     url(r'^i/disqus/(?P<id>[0-9]*)', 'disqus_mobile'),
     url(r'mu-86515d2e-482e5eb8-4a1262bb-ab3242ca/?$', 'load_test'),

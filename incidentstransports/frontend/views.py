@@ -87,8 +87,8 @@ def get_incidents(request, scope):
 	return_objs = Incident.objects.filter(modified__gte=filter_time).filter(validated=True).order_by('created').reverse()
 	return render(request, 'get_incidents.html', {'incidents' : return_objs, 'scope':scope})
 
-def get_incident(request, id):
-	incident = get_object_or_404(Incident, pk=id)                      
+def get_incident(request, incident_id, year=None, month=None, day=None, line_slug=None, line_id=None, incident_slug=None):
+	incident = get_object_or_404(Incident, pk=incident_id)                      
 	return render(request, 'detail_incident.html', {'incident' :  incident}) 
 
 def disqus_mobile(request, id):

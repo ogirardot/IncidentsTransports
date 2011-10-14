@@ -72,7 +72,9 @@ class Incident(models.Model):
     validated = models.BooleanField(default=True)  
     level = models.IntegerField(default=5)   
     duplicate_of = models.ForeignKey('self', null=True, blank=True)     
-                               
+    
+    def is_ended(self):
+        return True if self.ended_count > 3 else False                           
     def compute_relevance(self):
         return 100 + self.plus_count() * 10 \
             - self.minus_count() * 15 \
@@ -102,6 +104,17 @@ class Incident(models.Model):
                 'vote_ended' : self.ended_count(),
                 'status' : "Terminé" if self.ended_count() > 3 else "En cours...",
                 'reason' : self.reason }
+    @models.permalink     
+    def get_absolute_url(self): 
+        return ('get_incident_url', (), {
+            'year': self.created.year,
+            'month': self.created.month,
+            'day': self.created.day,
+            'line_slug': self.line.name.replace(" ", "-"),
+            'line_id': self.line.id,
+            'incident_slug': "slug",
+            'incident_id': self.id,
+        })
                                                                          
 VOTE_PLUS = 1
 VOTE_ENDED = 0
