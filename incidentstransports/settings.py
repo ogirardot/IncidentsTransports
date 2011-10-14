@@ -120,7 +120,7 @@ TEMPLATE_DIRS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
-    # 'Custom context processors here',
+    "django.core.context_processors.request",
 )         
 
 TEMPLATE_LOADERS = ('django.template.loaders.filesystem.Loader',
@@ -140,7 +140,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',  
-    'maintenancemode.middleware.MaintenanceModeMiddleware',
+    'maintenancemode.middleware.MaintenanceModeMiddleware',  
+    'django_sorting.middleware.SortingMiddleware', 
+	'pagination.middleware.PaginationMiddleware',
 )     
 
 #==============================================================================
@@ -185,7 +187,9 @@ INSTALLED_APPS = (
 	'registration',   
 	# piston rest api
 	'piston',
-	'maintenancemode', 
+	'maintenancemode',  
+	'django_sorting',
+	'pagination',
 ) + PROJECT_APPS      
 
 # for debug toolbar

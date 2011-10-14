@@ -51,6 +51,7 @@ urlpatterns += patterns('frontend.views',
     url(r'^incident/action/(?P<id>[0-9]*)/(?P<action>[a-z]*)', 'incident_interact'),
     url(r'^i/disqus/(?P<id>[0-9]*)', 'disqus_mobile'),
     url(r'mu-86515d2e-482e5eb8-4a1262bb-ab3242ca/?$', 'load_test'),
+	url(r'^archives/?$', 'archives'),
 )
 # sitemap                                         
 urlpatterns += patterns('',

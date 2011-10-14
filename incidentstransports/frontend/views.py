@@ -93,4 +93,11 @@ def get_incident(request, incident_id, year=None, month=None, day=None, line_slu
 
 def disqus_mobile(request, id):
 	incident = get_object_or_404(Incident, pk=id)                      
-	return render(request, 'disqus.html', {'incident' :  incident}) 	
+	return render(request, 'disqus.html', {'incident' :  incident}) 	   
+	
+def archives(request):                                       
+	incidents = Incident.objects.all() 
+	out = []
+	for i in range(1000):
+		out.extend(incidents)
+	return render(request, 'incidents/archives.html', {'incidents': out})
