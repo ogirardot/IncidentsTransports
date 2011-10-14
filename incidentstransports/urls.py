@@ -17,7 +17,9 @@ sitemaps = {
 # handler404 :
 handler404 = 'frontend.views.handler_404'
 
-urlpatterns = patterns('frontend.views',
+urlpatterns = patterns('frontend.views', 
+	(r'^accounts/', include('registration.urls')), 
+	(r'^accounts/', include('social_auth.urls')),   
     (r'^api/', include('api.urls')),
     (r'^sentry/', include('sentry.web.urls')),
     ('^nexus/', include(nexus.site.urls)),
@@ -35,8 +37,6 @@ urlpatterns = patterns('frontend.views',
     (r'^contribuer/?$', 'contribute'),
     (r'^dev/iphone/?$', 'dev_iphone'),
 	(r'^dev/android/?$', 'dev_android'), 
-	(r'^blog/', include('basic.blog.urls')),
-	(r'^comments/', include('django.contrib.comments.urls')),
     (r'^about/?$', 'about'),   
     (r'^home/?$', 'index'),
 	(r'^stats/?$', 'stats'),
@@ -46,12 +46,4 @@ urlpatterns = patterns('frontend.views',
 )                                                       
 urlpatterns += patterns('',
 	(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
-)
-
-#local urls for serving media files during development
-if settings.LOCAL_DEVELOPMENT:
-    urlpatterns += patterns("django.views",
-        url(r"%s(?P<path>.*)/$" % settings.MEDIA_URL[1:], "static.serve", {
-            "document_root": settings.MEDIA_ROOT,
-        })
-    )
+)               
