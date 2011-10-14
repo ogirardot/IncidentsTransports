@@ -1,4 +1,5 @@
-# Django settings for IncidentRATP project.
+# Import global settings to make it easier to extend settings. 
+from django.conf.global_settings import *
 import os
                        
 #==============================================================================
@@ -67,11 +68,10 @@ LOGIN_REDIRECT_URL = '/'
 MEDIA_URL = '/uploads/'
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(VAR_ROOT, 'static')
-#MEDIA_ROOT = os.path.join(VAR_ROOT, 'uploads')
+STATIC_ROOT = os.path.join(DJANGO_ROOT_PATH, 'static')
 
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_DIR, PROJECT_MODULE_NAME, 'static'),
+    os.path.join(DJANGO_ROOT_PATH, 'static'),
 )
                   
 ADMIN_MEDIA_PREFIX = STATIC_URL + "admin/"   
@@ -79,7 +79,7 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + "admin/"
 #==============================================================================
 # Logging with Sentry
 #==============================================================================
-
+"""
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -112,13 +112,13 @@ LOGGING = {
         },
     },
 }
-
+"""
 #==============================================================================
 # Templates
 #==============================================================================
 
 TEMPLATE_DIRS = (
-    os.path.join(PROJECT_DIR, PROJECT_MODULE_NAME, 'templates'),
+    os.path.join(DJANGO_ROOT_PATH, 'templates'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
@@ -159,21 +159,31 @@ PROJECT_APPS = (
 	'api',
 )
 INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
+	# django basic auth system
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	# and adding django-social-auth app
+	'social_auth',
+	# sessions, sites, and messages
+	'django.contrib.sessions',
+	'django.contrib.sites',
+	'django.contrib.messages',    
+	'django.contrib.humanize',  
+	'django.contrib.staticfiles',
+	'django.contrib.sitemaps',   
+	# django admin
     'django.contrib.admin',
-    'django.contrib.admindocs',
-	'basic.blog',
-	'basic.inlines',
-	'basic.tools',
-	'tagging',
-	'django.contrib.markup',
-	'django.contrib.comments',
+    # admin
     'nexus',
-    'gargoyle',
-    'sentry',
+    # feature switch
+    'gargoyle',     
+    #sentry
     'raven.contrib.django',
+    'sentry',              
+	# database migration tool
+	'south',   
+	#django registration app
+	'registration',   
+	# piston rest api
+	'piston', 
 ) + PROJECT_APPS
