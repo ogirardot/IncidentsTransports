@@ -15,7 +15,7 @@ def handler_404(request):
 def load_test(request):
 	return HttpResponse("42")
                                            
-def stats(request):
+def stats(request, template_name="stats.html"):
 	def extract_date(entity):
 		return entity.created.date()
 		  
@@ -24,19 +24,19 @@ def stats(request):
 	from itertools import groupby
 	data = [len(list(g)) for t, g in groupby(entities, key=extract_date)]                      
 	labels = []
-	return render(request, 'stats.html', {'data': data,'labels': labels})    
+	return render(request, template_name, {'data': data,'labels': labels})    
                   	                                
-def add_incident(request):
+def add_incident(request, template_name="incidents/add_incident.html"):
 	if request.method == "POST":
 		form = AddIncidentForm(request.POST)
 		if form.is_valid() and not re.search(" chier| connard| bite| chatte| cul", form['reason'].data) :
 			form.save()
-			return render('thanks.html', {'number' : Incident.objects.count()})
+			return render(request, 'static/thanks.html', {'number' : Incident.objects.count()})
 		else:
-			return render('add_incident.html', {'form' : form})
+			return render(request, template_name, {'form' : form})
 	else:
 		form = AddIncidentForm()
-		return render(request, 'add_incident.html', {'form' : form})
+		return render(request, template_name, {'form' : form})
 
 def incident_interact(request, id, action):
 	incident = Incident.objects.get(id=id)  
@@ -73,7 +73,7 @@ def incident_interact(request, id, action):
 		request.session['commented'] = str(incident.id)
 	return HttpResponse(str(out))
 	
-def get_incidents(request, scope):
+def get_incidents(request, scope, template_name="incidents/get_incidents.html"):
 	return_objs = []
 	filter_time = None
 	if scope == "minute":
@@ -85,15 +85,22 @@ def get_incidents(request, scope):
 	else:
 		return render('index.html')
 	return_objs = Incident.objects.filter(modified__gte=filter_time).filter(validated=True).order_by('created').reverse()
-	return render(request, 'get_incidents.html', {'incidents' : return_objs, 'scope':scope})
+	return render(request, template_name, {'incidents' : return_objs, 'scope':scope})
 
-def get_incident(request, incident_id, year=None, month=None, day=None, line_slug=None, line_id=None, incident_slug=None):
+def get_incident(request, incident_id, 
+		year=None, 
+		month=None, 
+		day=None, 
+		line_slug=None, 
+		line_id=None, 
+		incident_slug=None, 
+		template_name="incidents/detail_incident.html"):
 	incident = get_object_or_404(Incident, pk=incident_id)                      
-	return render(request, 'detail_incident.html', {'incident' :  incident}) 
+	return render(request, template_name, {'incident' :  incident}) 
 
-def disqus_mobile(request, id):
+def disqus_mobile(request, id, template_name="disqus.html"):
 	incident = get_object_or_404(Incident, pk=id)                      
-	return render(request, 'disqus.html', {'incident' :  incident}) 	   
+	return render(request, template_name, {'incident' :  incident}) 	   
 	
-def archives(request):                                       
-	return render(request, 'incidents/archives.html', {'incidents': Incident.objects.all() })
+def archives(request, template_name="incidents/archives.html"):                                       
+	return render(request, template_name, {'incidents': Incident.objects.all() })
