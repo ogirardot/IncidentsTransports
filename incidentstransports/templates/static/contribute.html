@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="page">
+			
+	<div class="top"></div>
+	<div class="content">
+		
+		<div class="header page">
+			<h1>Comment contribuer ?</h1>
+		</div>
+		
+		<div id="html_elements" class="padding">
+			
+			<p>Ce qui construit une communauté et qui permet d'avancer, c'est contribuer et aider ce en quoi en croit. Heureusement il ya plusieurs façons d'aider, et en voilà quelques unes :</p>
+			<h3>En faisant vivre ce service</h3>
+			<p>Et donc en parler autour de vous et l'alimenter en données, quand le besoin s'en fait sentir</p>
+			<h4>Par Twitter</h4>
+			<p>Nous avons beaucoup travailler pour intégrer <a href="http://www.twitter.com/">Twitter</a> parfaitement avec Incidents-Transports et vous permettre ainsi de <a href="{% url contribute_twitter %}">contribuer avec un simple tweet</a>.</p>
+			
+			<h4>Par Incidents-Transports</h4>
+			<p>Il vous suffit d'aller sur la page <a href="{% url add_incident %}">Ajouter un incident</a> et de remplir un simple formulaire.</p>
+			
+			<h3>Pour nous aider</h4>
+			<p>Ce travail étant totalement gratuit, nous ne tirons pas de profit de ce service, donc toute contribution financière est la bienvenue et nous permet au jour le jour de faire fonctionner ce service. Si donc vous souhaitez faire plus et nous aider à rester libre et ouvert aller sur la page <a href="{% url contribute_donate %}">Donations</a></p>
+			
+		</div>
+		
+	</div>
+	<div class="bottom"></div>
+</div>
+{% endblock %}

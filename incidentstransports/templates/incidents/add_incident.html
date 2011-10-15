@@ -1,0 +1,58 @@
+{% extends "base.html" %} 
+{% block extra_css %}
+<style type="text/css"> 
+#add_form ul {
+	display: block; 
+	float: left;
+	margin-bottom:10px; 
+	margin-right:10px; 
+}
+#add_form ul li {
+	color: red;
+}
+</style>
+{% endblock %}    
+{% block extra_js %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/mootools-core-1.3-full-nocompat-yc.js"></script> 
+<script type="text/javascript" src="{{ STATIC_URL }}js/mootools-more-1.3-with_forms.js"></script>
+<script type="text/javascript" charset="utf-8"> 
+window.addEvent('domready', function() {    	
+	$('send').addEvent( 'click', function(evt){
+		// Stops the submission of the form.
+		new Event(evt).stop();
+		     
+		new Form.Request("add_form", "page").send({
+			onFailure: function(xhr) {
+				$("add_form").set('text', '<b>Les données saisies sont incorrectes, veuillez réessayer.</b>'); 
+				alert("moi");
+			}});
+	});            
+});
+</script>
+{% endblock %}
+{% block content %}
+<div id="page">
+			
+	<div class="top"></div>
+	<div class="content">
+		
+		<div class="header page">
+			<h1>Contribuer et partager</h1>
+		</div>
+		
+		<div id="contact" class="padding">
+			<p>Ajouter une incident, c'est simple, facile, et ça aide tout le monde !</p>
+			<p class="validation"></p>
+			<h1>Ajouter un incident</h1>
+			<form id="add_form" action="/api/incident" method="POST">{% csrf_token %}
+				{{form.as_p}}
+				<div class="send_form">
+					<a href="#create" class="button" id="send"><span>Ajouter</span></a>
+				</div>
+				<div class="clear"></div>
+			</form>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+{% endblock %}

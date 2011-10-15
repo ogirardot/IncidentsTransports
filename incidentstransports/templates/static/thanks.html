@@ -1,0 +1,13 @@
+	<div class="top"></div>
+	<div class="content">
+		<div id="thanks" class="padding">
+			<h2> Merci pour votre contribution ! </h2>
+			<p> C'est le {{ number }} ième incident reporté durant la dernière semaine. Si vous aimez ce service et 
+				que vous voulez nous soutenir, n'hésitez pas à nous aider ou à nous suivre ! <p>
+			<p><a href="#">Flattr</a> <a href="#">Facebook</a> <a href="#">Twitter</a></p>
+			<p> Pareillement si vous trouvez que certaines choses sont améliorables, ou que vous aimeriez voir 
+				des fonctionnalités apparaître... ben voilà quoi !</p>
+			<p><a title="incidents par heure" href="{% url frontend.views.get_incidents 'hour' %}" class="button"><span>Retour aux incidents</span></a></p>
+		</div>
+	</div>
+	<div class="bottom"></div>
