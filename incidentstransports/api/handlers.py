@@ -130,18 +130,17 @@ class IncidentCRUDHandler(BaseHandler):
             try:
                 form = AddIncidentForm(request.POST)
                 if form.is_valid():
-                    form.save()
+                    form.save()            
                     return render('static/thanks.html', {'number': Incident.objects.count()});
                 else:
                     resp = rc.BAD_REQUEST
                     resp.write("Incorrect parameters, submitted form is invalid.")
                     return resp
-            except:
+            except:     
                 logger.error("Incident form submitted failed to be validated",
                              exc_info=sys.exc_info(), extra= {
                                  'request': request,
                                  'url': request.build_absolute_uri(),
-                                 'data': request.POST
                              })
                 return rc.BAD_REQUEST
 
