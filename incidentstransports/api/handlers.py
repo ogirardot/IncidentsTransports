@@ -131,7 +131,7 @@ class IncidentCRUDHandler(BaseHandler):
                 form = AddIncidentForm(request.POST)
                 if form.is_valid():
                     form.save()
-                    return render('thanks.html', {'number': Incident.objects.count()});
+                    return render('static/thanks.html', {'number': Incident.objects.count()});
                 else:
                     resp = rc.BAD_REQUEST
                     resp.write("Incorrect parameters, submitted form is invalid.")
