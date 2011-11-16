@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-         
+from django.template.defaultfilters import slugify
 from django.db import models
 from django import forms
     
@@ -112,7 +113,7 @@ class Incident(models.Model):
             'day': self.created.day,
             'line_slug': self.line.name.replace(" ", "-"),
             'line_id': self.line.id,
-            'incident_slug': "slug",
+            'incident_slug': slugify(self.reason)[:20],
             'incident_id': self.id,
         })
                                                                          
