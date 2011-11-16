@@ -8,7 +8,6 @@ ADMINS = ()
 # django project root, automatically adapt to your on plateform
 PROJECT_ROOT_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
                                                 
-import pdb; pdb.set_trace()
 
 MANAGERS = ADMINS
 
@@ -41,4 +40,4 @@ JENKINS_TASKS = (
 # adding debug toolbar :
 DEBUG_TOOLBAR_CONFIG = { 'INTERCEPT_REDIRECTS': False }
 MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)                                               
-INSTALLED_APPS += ('debug_toolbar','django_jenkins', 'fixture_magic', 'pyzen', )
+INSTALLED_APPS += ('debug_toolbar', )

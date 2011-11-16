@@ -41,7 +41,7 @@ LOGIN_URL = '/accounts/login/'
             
 # adding auth backends to use with the social-auth
 AUTHENTICATION_BACKENDS = (            
-	'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
     'social_auth.backends.twitter.TwitterBackend', 
     'social_auth.backends.facebook.FacebookBackend',
 )        
@@ -106,7 +106,7 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 )         
 
 TEMPLATE_LOADERS = ('django.template.loaders.filesystem.Loader',
-					'django.template.loaders.app_directories.Loader')
+                    'django.template.loaders.app_directories.Loader')
 
 SOCIAL_AUTH_COMPLETE_URL_NAME  = 'complete'
 SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'associate_complete'
@@ -124,7 +124,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',  
     'maintenancemode.middleware.MaintenanceModeMiddleware',  
     'django_sorting.middleware.SortingMiddleware', 
-	'pagination.middleware.PaginationMiddleware',
+    'pagination.middleware.PaginationMiddleware',
 )     
 
 #==============================================================================
@@ -136,40 +136,39 @@ TEST_RUNNER = 'tests.run_tests'
 # Project Apps
 #==============================================================================
 
-               
 PROJECT_APPS = (             
-	'frontend',
-	'api',
+    'frontend',
+    'api',
 )
 INSTALLED_APPS = (
-	# django basic auth system
-	'django.contrib.auth',
-	'django.contrib.contenttypes',
-	# and adding django-social-auth app
-	'social_auth',
-	# sessions, sites, and messages
-	'django.contrib.sessions',
-	'django.contrib.sites',
-	'django.contrib.messages',    
-	'django.contrib.humanize',  
-	'django.contrib.staticfiles',
-	'django.contrib.sitemaps',   
-	# django admin
+    # django basic auth system
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    # and adding django-social-auth app
+    'social_auth',
+    # sessions, sites, and messages
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',    
+    'django.contrib.humanize',  
+    'django.contrib.staticfiles',
+    'django.contrib.sitemaps',   
+    # django admin
     'django.contrib.admin',
     # admin
     'nexus',
     # feature switch
     'gargoyle',     
     #sentry
+    'sentry',
     'raven.contrib.django',
-    'sentry',              
-	# database migration tool
-	'south',   
-	#django registration app
-	'registration',   
-	# piston rest api
-	'piston',
-	'maintenancemode',  
-	'django_sorting',
-	'pagination',
+    # database migration tool
+    'south',   
+    #django registration app
+    'registration',   
+    # piston rest api
+    'piston',
+    'maintenancemode',  
+    'django_sorting',
+    'pagination',
 ) + PROJECT_APPS            
