@@ -1,5 +1,7 @@
-from django.test.client import Client     
-from frontend.models import Incident, Line, City
+from django.test.client import Client          
+from django.test import TestCase 
+from django.core.urlresolvers import reverse       
+from frontend.models import Incident,IncidentVote, Line, City
 import unittest    
 import re
 
@@ -22,7 +24,7 @@ class IncidentTransportsAPITestCase(unittest.TestCase):
         # init ligne :                                   
         c1 = City(name="Jaichi")                                   
         c1.save()
-        l1 = Line(name="Line Ichiban", aliases="L1, LI1", city=c1)
+        l1 = Line(name="Line Ichiban", city=c1)
         l1.save()
         
         c = Client()
@@ -51,23 +53,16 @@ class IncidentTransportsAPITestCase(unittest.TestCase):
         respo = c.get("/api/incident.json/%s" % incident_id)
         self.assertEqual(respo.status_code, 200)
         
-class IncidentTransportsThrottleTestCase(unittest.TestCase):
-    #@unittest.skip("testing skipping") # only with python 2.7
-    def test_throttle_get_all(self):
-        c = Client()              
-        for i in range(24):
-            respo = c.get("/api/incidents.json/all")
-            self.assertEqual(respo.status_code, 200)
-                         
-        respo = c.get("/api/incidents.json/all")
-        self.assertEqual(respo.status_code, 503)   
-    
-    def test_throttle_post_incident(self):
-        c = Client()
-        for i in range(5):
-            respo = c.post("/api/incident", {'line_id' : 1, 'reason': "my heart know my reasons", 'source':"test_client"})
-            self.assertEqual(respo.status_code, 201)
-            
-            
+class RegressionVoteTest(TestCase):
+    def test_invalidate_incident(self):
+        """Check that an incident when tagged as incorrect will properly be un-validated."""
+        i1 = Incident(line=Line.objects.get(pk=1), reason="Probleme dans le RER B", source="Android app", level=4)
+        i1.save()
+        response = self.client.post(reverse("api_vote_url", args=["json", i1.id, "minus"]), "", content_type="")
+        self.assertEqual(response.status_code, 201)
+        self.assertFalse(Incident.objects.get(pk=i1.id).validated)   
         
-            
+        
+    def test_source_set(self):
+        """Check that the source is properly set"""
+        pass

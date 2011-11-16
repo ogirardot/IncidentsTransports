@@ -63,7 +63,7 @@ class IncidentHandler(BaseHandler):
                 return_objs = Incident.objects.filter(validated=True).order_by(ORDER_FIELD_VALUES[order_field]).reverse()[:15]
             # filter out terminated events
             if scope =="current":
-                return_objs = [ incident for incident in return_objs if not incident.ended > 3]
+                return_objs = [ incident for incident in return_objs if not incident.ended_count() > 3]
             return [ incident.to_json() for incident in return_objs]
 
 class LigneHandler(BaseHandler):
@@ -151,17 +151,17 @@ class IncidentVoteHandler(BaseHandler):
             try:
                 incident = Incident.objects.get(pk=incident_id)
                 if action == "plus":
-                    return {"number": incident.plus()}
+                    return {"number": incident.plus_count()}
                 elif action == "minus":
-                    return {"number": incident.minus()}
+                    return {"number": incident.minus_count()}
                 elif action == "end":
-                    return {"number": incident.ended()}
+                    return {"number": incident.ended_count()}
                 else: return rc.BAD_REQUEST
             except:
                 return rc.BAD_REQUEST
         else: return rc.BAD_REQUEST
     
-    def create(self, request, incident_id, action):
+    def create(self, request, incident_id, action):   
         if incident_id:
             try:
                 incident = Incident.objects.get(pk=incident_id)
@@ -173,26 +173,26 @@ class IncidentVoteHandler(BaseHandler):
                 
                 if action == "plus":
                     vote.vote = VOTE_PLUS
-                    if incident.plus() - 3*incident.minus() > 3 and not incident.validated:
-                        incident.validated = True
                 elif action =="minus":
                     vote.vote = VOTE_MINUS
-                    if 3*incident.minus() - incident.plus() > 1:
-                        incident.validated = False
                 elif action == "end":
                     vote.vote = VOTE_ENDED
                 comments = request.session.get('commented', None)
-                if comments or incident.ended() > 8:
-                    if incident.ended() > 8 or str(incident.id) in comments.split(","):
+                if comments or incident.ended_count() > 8:
+                    if incident.ended_count() > 8 or str(incident.id) in comments.split(","):
                         return rc.ALL_OK
                     else:
-                        incident.save()
                         vote.save()
                         request.session['commented'] += "," + str(incident.id)
                 else:
-                    incident.save()
                     vote.save()
-                    request.session['commented'] = str(incident.id)
+                    request.session['commented'] = str(incident.id)          
+                                      
+                # check afterwards if incident is invalid 
+                if 3*incident.minus_count() - incident.plus_count() > 1:
+                    incident.validated = False
+                    incident.save()
+        
                 return rc.CREATED
             except Exception,e:
                 print e
