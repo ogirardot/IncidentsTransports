@@ -188,7 +188,8 @@ class IncidentVoteHandler(BaseHandler):
                     vote.save()
                     request.session['commented'] = str(incident.id)          
                                       
-                # check afterwards if incident is invalid 
+                # check afterwards if incident is invalid                 
+                import pdb; pdb.set_trace()
                 if 3*incident.minus_count() - incident.plus_count() > 1:
                     incident.validated = False
                     incident.save()

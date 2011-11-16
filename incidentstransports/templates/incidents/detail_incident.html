@@ -2,13 +2,20 @@
 {% block extra_js %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/mootools-core-1.3-full-nocompat-yc.js"></script>
 <script type="text/javascript" charset="utf-8">
-function incident_interact(id, scope) {
-	new Request.HTML({url: "/incident/action/" + id + "/" + scope, 
-		onSuccess: function(html) {
+function incident_interact(id, scope) {                           
+	var resource_url = "/api/incident.json/vote/" + id + "/"+ scope
+	new Request({
+		method: 'post',
+		url: "/api/incident.json/vote/" + id + "/"+ scope, 
+		onSuccess: function(event, xhr) {
 			//Clear the text currently inside the results div.
-			$(scope + '_' + id).set('text', '');
 			//Inject the new DOM elements into the results div.
-			$(scope + '_' + id).adopt(html);
+			new Request.JSON({
+				method: 'get',
+				url : "/api/incident.json/vote/" + id + "/"+ scope,
+				onSuccess: function(xhr) {
+					$(scope + '_' + id).set('text', xhr.number);
+				}}).send();
 		},
 		//Our request will most likely succeed, but just in case, we'll add an
 		//onFailure method which will let the user know what happened.

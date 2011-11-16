@@ -129,7 +129,7 @@ class IncidentVote(models.Model):
     vote = models.IntegerField()
             
 class AddIncidentForm(forms.ModelForm):
-    contributors = forms.EmailField(label="Email", help_text="Indiquez votre adresse email pour valider la sauvegarde") 
+    source = forms.EmailField(label="Email", help_text="Indiquez votre adresse email pour valider la sauvegarde") 
     class Meta:
         model = Incident
-        fields = ('line', 'reason', 'contributors')
+        fields = ('line', 'reason', 'source')

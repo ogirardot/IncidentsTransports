@@ -37,41 +37,6 @@ def add_incident(request, template_name="incidents/add_incident.html"):
 	else:
 		form = AddIncidentForm()
 		return render(request, template_name, {'form' : form})
-
-def incident_interact(request, id, action):
-	incident = Incident.objects.get(id=id)  
-	vote = IncidentVote(incident=incident)
-	vote.source = request.META['REMOTE_ADDR']
-	out= ""
-	if action == "plus":
-		vote.vote = VOTE_PLUS
-		if incident.plus_count() + 1 - incident.minus_count() > 3 and not incident.validated:
-			incident.validated = True
-		out = incident.plus_count() + 1
-	elif action =="minus":
-		vote.vote = VOTE_MINUS
-		if incident.minus_count() - 3 - incident.plus_count() > 1:
-			incident.validated = False   
-		out = incident.minus_count() + 3
-	elif action == "end":
-		vote.vote = VOTE_ENDED
-		out = incident.ended_count() + 1
-	comments = request.session.get('commented', None)
-	if comments or incident.ended_count() > 8:
-		if incident.ended_count() > 8 or str(incident.id) in comments.split(","): 
-			if action =="minus":
-				return HttpResponse(str(out-3))   
-			else:
-				return HttpResponse(str(out-1))
-		else:   
-			incident.save()
-			vote.save()
-			request.session['commented'] += "," + str(incident.id)
-	else:
-		incident.save()  
-		vote.save()
-		request.session['commented'] = str(incident.id)
-	return HttpResponse(str(out))
 	
 def get_incidents(request, scope, template_name="incidents/get_incidents.html"):
 	return_objs = []
