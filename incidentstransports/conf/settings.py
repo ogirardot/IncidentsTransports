@@ -52,7 +52,7 @@ LOGIN_REDIRECT_URL = '/'
 MEDIA_URL = '/uploads/'
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT_PATH, 'staticfiles')
+STATIC_ROOT = os.path.join(PROJECT_ROOT_PATH, 'public', 'static')
                    
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT_PATH, 'static'),
