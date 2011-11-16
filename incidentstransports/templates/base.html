@@ -7,8 +7,8 @@
     <meta name="keywords"
           content="ratp, metro, rer, tramway, transports, paris, france, trafic, incidents"/>
     <meta name="robots" content="index,follow"/>
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/styles.css" />
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/blue-green.css" media="screen" /> 
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL|default:"/static/" }}css/styles.css" />
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL|default:"/static/" }}css/blue-green.css" media="screen" /> 
 	{% block extra_css %}{% endblock %}
 	{% block extra_js %}{% endblock %}
 <script type="text/javascript">

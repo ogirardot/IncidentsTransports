@@ -10,7 +10,7 @@
 		</div>
 		
 		<div id="html_elements" class="padding">
-			<p><img src="/static/images/404/{{ image }}" style="width:500px; height:300px;"/></p>
+			<p><img src="{{ STATIC_URL|default:"/static/" }}images/404/{{ image }}" style="width:500px; height:300px;"/></p>
 			<p>{{legende}}</p>
 		</div>
 		
