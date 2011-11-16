@@ -11,7 +11,8 @@ def get_Paris():
     
 class Line(models.Model):
     name = models.CharField(max_length=255)
-    aliases = models.TextField(default="")
+    is_referential = models.BooleanField(default=True)
+    aliases = models.ManyToManyField('self', null=True, blank=True)
     city = models.ForeignKey(City, default=get_Paris)
     def __unicode__(self):
         return "%s" % self.name     
