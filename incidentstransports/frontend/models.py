@@ -73,7 +73,8 @@ class Incident(models.Model):
     source = models.TextField()
     validated = models.BooleanField(default=True)  
     level = models.IntegerField(default=5)   
-    duplicate_of = models.ForeignKey('self', null=True, blank=True)     
+    duplicate_of = models.ForeignKey('self', null=True, blank=True)
+    is_spam = models.BooleanField(default=False)     
     
     def is_ended(self):
         return True if self.ended_count > 3 else False                           
