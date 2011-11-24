@@ -46,7 +46,7 @@ urlpatterns += patterns('frontend.views',
         view='get_incidents',
         name="get_incidents"),     
     # this one is deprecated :
-    url(r'^incident/detail/(?P<incident_id>[0-9]*)/?$', 
+    url(r'^incident/detail/(?P<incident_id>[0-9]+)/?$', 
         view='get_incident'),
     # this is the more SEO friendly version :
     url(r'^incident/detail/(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<line_slug>[-\w]+)_(?P<line_id>[0-9]+)/(?P<incident_slug>[-\w]+)_(?P<incident_id>[0-9]+)/$',
