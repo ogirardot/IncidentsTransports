@@ -15,7 +15,9 @@ class Line(models.Model):
     aliases = models.ManyToManyField('self', null=True, blank=True)
     city = models.ForeignKey(City, default=get_Paris)
     def __unicode__(self):
-        return "%s" % self.name     
+        return "%s" % self.name    
+    class Meta:
+        ordering = ["name"] 
         
 class Station(models.Model):       
     name = models.CharField(max_length=255)
