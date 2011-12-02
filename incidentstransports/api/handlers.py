@@ -191,7 +191,7 @@ class IncidentVoteHandler(BaseHandler):
                 # check afterwards if incident is invalid                 
                 if 3*incident.minus_count() - incident.plus_count() > 1:
                     incident.validated = False
-                    incident.save()
+                incident.save()
         
                 return rc.CREATED
             except Exception,e:
