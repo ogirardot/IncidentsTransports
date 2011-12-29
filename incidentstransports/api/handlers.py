@@ -69,7 +69,11 @@ class IncidentHandler(BaseHandler):
 class LigneHandler(BaseHandler):
     allowed_methods = ('GET', )
     model = Line
-    fields = ('uid', 'name')
+    fields = ('uid', 'name',)
+    
+    def read(self, request):
+        return Line.objects.filter(is_referential=True)
+    
     @classmethod
     def uid(klass, model):
         return model.pk

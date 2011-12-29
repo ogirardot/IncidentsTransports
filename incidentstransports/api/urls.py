@@ -17,4 +17,5 @@ urlpatterns = patterns('',
 	url(r'^incident/?$', crud_incident_handler),
 	url(r'^incident/duplicate/?$', duplicate_incident_handler), 
 	url(r'^ligne/?$', ligne_handler),
-)
+	url(r'^ligne.(?P<emitter_format>[a-z]+)', ligne_handler),
+)                                                           
