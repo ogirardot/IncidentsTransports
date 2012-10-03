@@ -1,4 +1,5 @@
-import random, re
+import random
+import re
 from django.http import HttpResponse, HttpResponseRedirect as redirect
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
@@ -6,15 +7,19 @@ from datetime import datetime, timedelta
 from models import Station, Line, Incident, IncidentVote, VOTE_PLUS, VOTE_MINUS, VOTE_ENDED, AddIncidentForm
 from frontend.utils import render
     
+
 def handler_404(request):
-    images = ["1293872626292.jpg", "1293878551093.jpg" ]
+    images = ["1293872626292.jpg", "1293878551093.jpg"]
     legendes = ["Mais pourquoi sont-ils aussi mechant ?!", "rien a dire d'autre..."]
     pick_a_number = random.randint(0, len(images))-1
     return render(request, '404.html' , { 'image' : images[pick_a_number], 'legende' : legendes[pick_a_number]})
+
                            
 def load_test(request):
+    """This is a view designed to handle Blitz.io validation"""
     return HttpResponse("42")
-                                           
+
+
 def stats(request, template_name="stats.html"):
     def extract_date(entity):
         return entity.created.date()
@@ -26,6 +31,7 @@ def stats(request, template_name="stats.html"):
     labels = []
     return render(request, template_name, {'data': data,'labels': labels})    
                                                     
+
 def add_incident(request, template_name="incidents/add_incident.html"):
     if request.method == "POST":
         form = AddIncidentForm(request.POST)
@@ -38,6 +44,7 @@ def add_incident(request, template_name="incidents/add_incident.html"):
         form = AddIncidentForm()
         return render(request, template_name, {'form' : form})
     
+
 def get_incidents(request, scope, template_name="incidents/get_incidents.html"):
     return_objs = []
     filter_time = None
@@ -52,6 +59,7 @@ def get_incidents(request, scope, template_name="incidents/get_incidents.html"):
     return_objs = Incident.objects.filter(modified__gte=filter_time).filter(validated=True).order_by('created').reverse()
     return render(request, template_name, {'incidents' : return_objs, 'scope':scope})
 
+
 def get_incident(request, incident_id, 
         year=None, 
         month=None, 
@@ -63,9 +71,11 @@ def get_incident(request, incident_id,
     incident = get_object_or_404(Incident, pk=incident_id)                      
     return render(request, template_name, {'incident' :  incident}) 
 
+
 def disqus_mobile(request, id, template_name="disqus.html"):
     incident = get_object_or_404(Incident, pk=id)                      
     return render(request, template_name, {'incident' :  incident})        
     
+
 def archives(request, template_name="incidents/archives.html"):                                       
-    return render(request, template_name, {'incidents': Incident.objects.all() })
+    return render(request, template_name, {'incidents': Incident.objects.all()})

@@ -31,13 +31,7 @@ class IncidentTransportsAPITestCase(unittest.TestCase):
         respo = c.get("/api/ligne")
         self.assertEqual(respo.status_code, 200)  
         self.assertTrue('{ "name": "Line Ichiban", "uid": 20 }' in re.sub(r"[\r\n ]+", r" ", respo.content.strip()))
-    
-    #ignored because test limit reached
-    #def test_get_incorrect_incident(self):
-    #   c = Client()
-    #   respo = c.get("/api/incident.json/1337")
-    #   self.assertEqual(respo.status_code, 500)
-        
+            
     def test_post_incident(self):  
         c = Client()                                                                                                  
         # this is bad request, no content_type
@@ -53,6 +47,7 @@ class IncidentTransportsAPITestCase(unittest.TestCase):
         respo = c.get("/api/incident.json/%s" % incident_id)
         self.assertEqual(respo.status_code, 200)
         
+
 class RegressionVoteTest(TestCase):
     def test_invalidate_incident(self):
         """Check that an incident when tagged as incorrect will properly be un-validated."""
@@ -61,7 +56,6 @@ class RegressionVoteTest(TestCase):
         response = self.client.post(reverse("api_vote_url", args=["json", i1.id, "minus"]), "", content_type="")
         self.assertEqual(response.status_code, 201)
         self.assertFalse(Incident.objects.get(pk=i1.id).validated)   
-        
         
     def test_source_set(self):
         """Check that the source is properly set"""

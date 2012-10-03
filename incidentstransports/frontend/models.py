@@ -5,25 +5,46 @@ from django import forms
     
 class City(models.Model):
     name = models.CharField(max_length=255)
-                                     
-def get_Paris():
+
+    class Meta:
+        verbose_name_plural = "cities"
+
+            
+def _get_paris():
     return City.objects.get(pk=1)
-    
+
+
 class Line(models.Model):
     name = models.CharField(max_length=255)
     is_referential = models.BooleanField(default=True)
     aliases = models.ManyToManyField('self', null=True, blank=True)
-    city = models.ForeignKey(City, default=get_Paris)
-    def __unicode__(self):
-        return "%s" % self.name    
+    city = models.ForeignKey(City, default=_get_paris)
+    
     class Meta:
-        ordering = ["name"] 
-        
+        ordering = ["name"]
+        verbose_name_plural = "lines"
+
+    def __unicode__(self):
+        return "%s" % (self.name)
+    
+
 class Station(models.Model):       
     name = models.CharField(max_length=255)
     aliases = models.TextField(default="")
-    line = models.ForeignKey(Line)
+    line = models.ForeignKey(Line, related_name="stations")
+
+    class Meta:
+        verbose_name_plural = "stations"
+
+    def __unicode__(self):
+        return "%s (%s)" % (self.name, self.line.name)
+
                                                             
+VOTE_PLUS = 1
+VOTE_ENDED = 0
+VOTE_MINUS = -1    
+
+
 class Incident(models.Model):  
     """                   
     Incident representation of problems on the network 
@@ -80,21 +101,27 @@ class Incident(models.Model):
     
     def is_ended(self):
         return True if self.ended_count > 3 else False                           
+    
     def compute_relevance(self):
         return 100 + self.plus_count() * 10 \
             - self.minus_count() * 15 \
             - self.ended_count() * 20 \
             - self.compute_hours_since_report() \
             - (500 if self.duplicate_of else 0) 
+    
     def compute_hours_since_report(self):
         from datetime import datetime
         return (datetime.now() - self.created).seconds / 60
+    
     def plus_count(self):
         return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_PLUS).count()        
+    
     def minus_count(self):
         return 3*IncidentVote.objects.filter(incident=self).filter(vote=VOTE_MINUS).count()
+    
     def ended_count(self):           
         return IncidentVote.objects.filter(incident=self).filter(vote=VOTE_ENDED).count()    
+    
     def to_json(self):
         return {'uid' : self.id,
                 'relevance_score' : self.compute_relevance(),
@@ -109,6 +136,7 @@ class Incident(models.Model):
                 'vote_ended' : self.ended_count(),
                 'status' : "Terminé" if self.ended_count() > 3 else "En cours...",
                 'reason' : self.reason }
+    
     @models.permalink     
     def get_absolute_url(self): 
         return ('get_incident_url', (), {
@@ -120,17 +148,15 @@ class Incident(models.Model):
             'incident_slug': slugify(self.reason)[:20],
             'incident_id': self.id,
         })
-                                                                         
-VOTE_PLUS = 1
-VOTE_ENDED = 0
-VOTE_MINUS = -1    
+
 
 class IncidentVote(models.Model):
-    incident = models.ForeignKey(Incident)
+    incident = models.ForeignKey(Incident, related_name="votes")
     created = models.DateTimeField(auto_now=True)
     source = models.TextField()
     vote = models.IntegerField()
-            
+
+
 class AddIncidentForm(forms.ModelForm):
     source = forms.EmailField(label="Email", help_text="Indiquez votre adresse email pour valider la sauvegarde") 
     class Meta:
