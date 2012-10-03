@@ -160,7 +160,7 @@ INSTALLED_APPS = (
     # feature switch
     'gargoyle',     
     #sentry
-    'sentry',
+    #'sentry',
     'raven.contrib.django',
     # database migration tool
     'south',   
