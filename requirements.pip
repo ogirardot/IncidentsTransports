@@ -9,13 +9,12 @@ nexus==0.2.0
 south==0.7.3
 django-bitly==0.6
 django-debug-toolbar==0.8.5
-django-social-auth==0.5.13
 pep8==0.6.1
 django-jenkins==0.11.1
 django-maintenancemode==0.9.2
 django_sorting==0.1
 django-pagination==1.0.7
-django-social-auth>=0.3.3
+django-social-auth>=0.5.13
 django-maintenancemode>=0.9.2
 
 
